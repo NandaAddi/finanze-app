@@ -1,3 +1,5 @@
+"use client";
+
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
 import { motion } from "framer-motion";
