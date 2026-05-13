@@ -17,19 +17,40 @@ async function getAuth() {
 export async function syncUserWithDatabase() {
   try {
     const user = await currentUser();
-    if (!user) return null;
+    if (!user) throw new Error('No Clerk user found');
+    
     const userId = user.id;
     const email = user.emailAddresses[0]?.emailAddress || '';
     const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
     const avatarUrl = user.imageUrl || '';
-    const { data: profile } = await supabaseAdmin.from('profiles').select('*').eq('id', userId).maybeSingle();
+    
+    const { data: profile, error: fetchError } = await supabaseAdmin
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+      
+    if (fetchError) throw fetchError;
+    
     if (!profile) {
-      const { data: newProfile, error } = await supabaseAdmin.from('profiles').insert({ id: userId, email, full_name: fullName, avatar_url: avatarUrl }).select().single();
-      if (error) throw error;
+      console.log(`[Sync] Creating profile for ${userId}...`);
+      const { data: newProfile, error } = await supabaseAdmin
+        .from('profiles')
+        .insert({ id: userId, email, full_name: fullName, avatar_url: avatarUrl })
+        .select()
+        .single();
+        
+      if (error) {
+        console.error('[Sync Error] Failed to insert profile:', error);
+        throw error;
+      }
       return newProfile;
     }
     return profile;
-  } catch (error) { return null; }
+  } catch (error: any) { 
+    console.error('[Sync Critical Error]:', error.message);
+    throw error; 
+  }
 }
 
 export async function getFinancialOverview() {
