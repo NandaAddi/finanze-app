@@ -7,6 +7,10 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 async function getAuth() {
   const { userId } = await auth();
   if (!userId) throw new Error('Unauthorized');
+  
+  // Pastikan profil user ada di DB sebelum lanjut (Mencegah FK Constraint Error)
+  await syncUserWithDatabase();
+  
   return userId;
 }
 

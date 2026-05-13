@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -27,6 +30,10 @@ export function WelcomeModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[360px] p-8 border-none bg-card rounded-[2rem] shadow-2xl">
+        <VisuallyHidden.Root>
+          <DialogTitle>Selamat Datang di Finanze</DialogTitle>
+          <DialogDescription>Sambutan dari pengembang aplikasi Finanze.</DialogDescription>
+        </VisuallyHidden.Root>
         <div className="flex flex-col items-center text-center space-y-6">
            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-emerald-500/10 shadow-lg">
               <Image 
