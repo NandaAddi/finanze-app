@@ -94,12 +94,12 @@ CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON public.categories F
 DROP TRIGGER IF EXISTS update_transactions_updated_at ON public.transactions;
 CREATE TRIGGER update_transactions_updated_at BEFORE UPDATE ON public.transactions FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- 5. Row Level Security (RLS) - Disable for SaaS logic
-ALTER TABLE IF EXISTS public.profiles DISABLE ROW LEVEL SECURITY;
-ALTER TABLE IF EXISTS public.wallets DISABLE ROW LEVEL SECURITY;
-ALTER TABLE IF EXISTS public.categories DISABLE ROW LEVEL SECURITY;
-ALTER TABLE IF EXISTS public.transactions DISABLE ROW LEVEL SECURITY;
-ALTER TABLE IF EXISTS public.activity_logs DISABLE ROW LEVEL SECURITY;
+-- 5. Row Level Security (RLS) - Secure for SaaS logic
+ALTER TABLE IF EXISTS public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.wallets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.activity_logs ENABLE ROW LEVEL SECURITY;
 
 -- 6. Database Functions (RPC) - ATOMIC UPDATES
 CREATE OR REPLACE FUNCTION public.adjust_wallet_balance(

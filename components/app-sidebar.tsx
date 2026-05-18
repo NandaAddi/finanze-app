@@ -10,7 +10,9 @@ import {
   ReceiptIcon,
   BarChartIcon,
   Home,
-  Sparkles
+  Sparkles,
+  ShieldCheck,
+  Scale
 } from "lucide-react"
 
 import { useRouter, usePathname } from "next/navigation"
@@ -39,6 +41,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useUser } from '@/components/user-provider'
 import { useMounted } from '@/hooks/use-mounted'
+import { getOptimizedAvatarUrl } from '@/lib/utils'
 
 interface AppSidebarProps {
   initialUser?: {
@@ -58,7 +61,7 @@ const menuItems = [
 ]
 
 export function AppSidebar({ initialUser }: AppSidebarProps) {
-  const { signOut: legacySignOut } = useUser();
+  const { signOut } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
@@ -72,12 +75,9 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
 
   const handleSignOut = async () => {
     try {
-      const { createClient } = await import('@/utils/supabase/client');
-      const supabase = createClient();
-      await supabase.auth.signOut();
+      await signOut();
       toast.success('Signed out successfully');
-      router.push('/login');
-      router.refresh();
+      router.push('/sign-in');
     } catch (error) {
       toast.error('Failed to sign out');
     }
@@ -124,7 +124,7 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
       </SidebarContent>
 
       {/* ── Footer ── */}
-      <SidebarFooter className="py-4 flex flex-col items-center gap-4">
+      <SidebarFooter className="py-4 flex flex-col items-center gap-4 md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -133,7 +133,7 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
             >
               <Avatar className="h-8 w-8">
                 {userData.avatar ? (
-                  <AvatarImage src={userData.avatar} alt={userData.name} />
+                  <AvatarImage src={getOptimizedAvatarUrl(userData.avatar)} alt={userData.name} className="object-cover" />
                 ) : (
                   <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-medium">
                     {userData.name?.[0]?.toUpperCase() || '?'}
@@ -156,7 +156,21 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
               {mounted && theme === 'dark' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
               {mounted && theme === 'dark' ? 'Light mode' : 'Dark mode'}
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer" onClick={handleSignOut}>
+            <DropdownMenuSeparator className="bg-border/30" />
+            <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer" asChild>
+              <Link href="/privacy-policy" className="flex items-center w-full gap-2">
+                <ShieldCheck className="h-3.5 w-3.5 text-muted-foreground" />
+                Privacy Policy
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer" asChild>
+              <Link href="/terms-of-service" className="flex items-center w-full gap-2">
+                <Scale className="h-3.5 w-3.5 text-muted-foreground" />
+                Terms of Service
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-border/30" />
+            <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer text-destructive focus:text-destructive" onClick={handleSignOut}>
               <LogOutIcon className="h-3.5 w-3.5" />
               Sign out
             </DropdownMenuItem>

@@ -3,6 +3,7 @@
 import { useUser } from "@/components/user-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { getOptimizedAvatarUrl } from "@/lib/utils";
 import Image from "next/image";
 
 export function ProfileHeader() {
@@ -28,7 +29,7 @@ export function ProfileHeader() {
       {/* Profile Info Overlay */}
       <div className="absolute -bottom-6 left-8 flex items-end gap-6">
         <Avatar className="h-28 w-28 border-4 border-background shadow-xl ring-2 ring-primary/20">
-          <AvatarImage src={user?.avatar_url} alt={user?.full_name || "User"} className="object-cover" />
+          <AvatarImage src={getOptimizedAvatarUrl(user?.avatar_url, 192)} alt={user?.full_name || "User"} className="object-cover" />
           <AvatarFallback className="text-3xl bg-primary/10 text-primary font-bold">
             {user?.full_name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "?"}
           </AvatarFallback>

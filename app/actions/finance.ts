@@ -4,13 +4,25 @@ import { supabaseAdmin } from '@/utils/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { auth, currentUser } from '@clerk/nextjs/server';
 
+/**
+ * Fast auth — only validates the Clerk JWT, zero DB round-trips.
+ * Use this for READ operations.
+ */
 async function getAuth() {
   const { userId } = await auth();
   if (!userId) throw new Error('Unauthorized');
-  
-  // Pastikan profil user ada di DB sebelum lanjut (Mencegah FK Constraint Error)
+  return userId;
+}
+
+/**
+ * Auth + profile sync — ensures the profiles row exists before an INSERT.
+ * Only needed for createTransaction and createWallet where the FK constraint
+ * requires the profile to exist. Calling this on every action was the main
+ * source of 200-500ms overhead per request.
+ */
+async function getAuthEnsureProfile() {
+  const userId = await getAuth();
   await syncUserWithDatabase();
-  
   return userId;
 }
 
@@ -81,7 +93,8 @@ export async function getFinancialOverview() {
 
 export async function createTransaction(data: any) {
   try {
-    const userId = await getAuth();
+    // Ensure profile FK exists before inserting a transaction
+    const userId = await getAuthEnsureProfile();
     const { error: insertError } = await supabaseAdmin.from('transactions').insert({
       id: `trans_${Math.random().toString(36).substring(2, 15)}`,
       amount: data.amount, type: data.type, description: data.description, wallet_id: data.wallet_id, category_id: data.category_id, created_by: userId
@@ -96,7 +109,8 @@ export async function createTransaction(data: any) {
 
 export async function createWallet(data: any) {
   try {
-    const userId = await getAuth();
+    // Ensure profile FK exists before inserting a wallet
+    const userId = await getAuthEnsureProfile();
     const id = `wallet_${Math.random().toString(36).substring(2, 15)}`;
     const { data: wallet, error } = await supabaseAdmin.from('wallets').insert({
       id, name: data.name, description: data.description, balance: data.balance, currency: data.currency, user_id: userId, slug: data.name.toLowerCase().replace(/ /g, '-') + '-' + id.split('_')[1]
@@ -142,8 +156,26 @@ export async function getCategories() {
 export async function updateTransaction(data: any) {
   try {
     const userId = await getAuth();
-    const { data: oldT } = await supabaseAdmin.from('transactions').select('*').eq('id', data.id).single();
-    if (!oldT) throw new Error('Not found');
+    // 🛡️ SECURITY PATCH: Ensure old transaction exists and is owned by the logged-in user
+    const { data: oldT } = await supabaseAdmin
+      .from('transactions')
+      .select('*')
+      .eq('id', data.id)
+      .eq('created_by', userId) // ← Ownership Validation
+      .single();
+      
+    if (!oldT) throw new Error('Transaction not found or unauthorized access.');
+    
+    // 🛡️ SECURITY PATCH: Ensure target wallet belongs to the user
+    const { data: targetWallet } = await supabaseAdmin
+      .from('wallets')
+      .select('id')
+      .eq('id', data.wallet_id)
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (!targetWallet) throw new Error('Target wallet not found or unauthorized access.');
+
     const oldVal = oldT.type === 'INCOME' ? oldT.amount : -oldT.amount;
     const newVal = data.type === 'INCOME' ? data.amount : -data.amount;
     if (oldT.wallet_id !== data.wallet_id) {
@@ -161,15 +193,26 @@ export async function updateTransaction(data: any) {
 }
 
 export async function deleteTransactionAction(id: string) {
-  const userId = await getAuth();
-  const { data: t } = await supabaseAdmin.from('transactions').select('*').eq('id', id).single();
-  if (t) {
-    const adj = t.type === 'INCOME' ? -t.amount : t.amount;
-    await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: t.wallet_id, p_amount: adj });
-    await supabaseAdmin.from('transactions').delete().eq('id', id);
+  try {
+    const userId = await getAuth();
+    // 🛡️ SECURITY PATCH: Ensure transaction is owned by the logged-in user before delete
+    const { data: t } = await supabaseAdmin
+      .from('transactions')
+      .select('*')
+      .eq('id', id)
+      .eq('created_by', userId) // ← Ownership Validation
+      .single();
+
+    if (t) {
+      const adj = t.type === 'INCOME' ? -t.amount : t.amount;
+      await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: t.wallet_id, p_amount: adj });
+      await supabaseAdmin.from('transactions').delete().eq('id', id).eq('created_by', userId);
+    }
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
-  revalidatePath('/dashboard');
-  return { success: true };
 }
 
 export async function updateWallet(data: any) {
@@ -214,10 +257,26 @@ export async function seedDefaultCategories(walletId: string) {
 }
 
 export async function transferFunds(data: any) {
-  await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: data.fromWalletId, p_amount: -data.amount });
-  await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: data.toWalletId, p_amount: data.amount });
-  revalidatePath('/dashboard');
-  return { success: true };
+  try {
+    const userId = await getAuth();
+    
+    // 🛡️ SECURITY PATCH: Cross-validate ownership of BOTH source and destination wallets
+    const [fromWallet, toWallet] = await Promise.all([
+      supabaseAdmin.from('wallets').select('id').eq('id', data.fromWalletId).eq('user_id', userId).maybeSingle(),
+      supabaseAdmin.from('wallets').select('id').eq('id', data.toWalletId).eq('user_id', userId).maybeSingle()
+    ]);
+
+    if (!fromWallet.data || !toWallet.data) {
+      throw new Error('Akses transfer ditolak. Salah satu dompet tidak valid atau bukan milik Anda.');
+    }
+
+    await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: data.fromWalletId, p_amount: -data.amount });
+    await supabaseAdmin.rpc('adjust_wallet_balance', { p_wallet_id: data.toWalletId, p_amount: data.amount });
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
 }
 
 export async function updateProfile(data: any) {

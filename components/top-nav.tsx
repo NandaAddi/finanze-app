@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { getNotifications, markNotifAsRead, deleteNotif } from '@/app/actions/finance';
 import { toast } from 'sonner';
 import { SignOutButton } from "@clerk/nextjs";
+import { getOptimizedAvatarUrl } from "@/lib/utils";
 
 export function TopNav() {
   const { user } = useUser();
@@ -81,6 +82,7 @@ export function TopNav() {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            aria-label="Toggle theme"
             className="w-10 h-10 rounded-full flex items-center justify-center bg-muted/50 border border-border/10 active:scale-90 transition-all"
           >
             {mounted && theme === 'dark' ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-slate-400" />}
@@ -88,7 +90,10 @@ export function TopNav() {
 
           <Sheet onOpenChange={(open) => open && fetchNotifs()}>
             <SheetTrigger asChild>
-              <button className="relative w-10 h-10 rounded-full flex items-center justify-center bg-muted/50 border border-border/10 active:scale-90 transition-all">
+              <button 
+                aria-label="Buka notifikasi"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center bg-muted/50 border border-border/10 active:scale-90 transition-all"
+              >
                 <Bell className="w-4 h-4 text-muted-foreground" />
                 {unreadCount > 0 && (
                   <span className="absolute top-3 right-3 w-2 h-2 bg-emerald-500 rounded-full border-2 border-background animate-pulse" />
@@ -162,7 +167,7 @@ export function TopNav() {
           
           <Link href="/dashboard/settings">
             <Avatar className="w-10 h-10 border border-border/10 shadow-sm active:scale-90 transition-all">
-              {mounted && <AvatarImage src={user?.avatar_url} />}
+              {mounted && <AvatarImage src={getOptimizedAvatarUrl(user?.avatar_url)} alt={user?.full_name || "User Avatar"} className="object-cover" />}
               <AvatarFallback className="bg-emerald-500/10 text-emerald-500 text-xs font-bold">
                 {mounted ? (user?.full_name?.[0]?.toUpperCase() || 'U') : 'U'}
               </AvatarFallback>

@@ -15,17 +15,13 @@ import {
   CreditCard,
   Receipt,
   PiggyBank,
-  ArrowRight,
   MoreHorizontal,
   Sparkles,
   Camera
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { AddTransactionDialog } from '@/components/add-transaction-dialog';
 import { TransferDialog } from '@/components/transfer-dialog';
-import { ReceiptScannerDialog } from '@/components/receipt-scanner-dialog';
-import { AIChatDialog } from '@/components/ai-chat-dialog';
-import { BottomNav } from '@/components/bottom-nav';
+import { useGlobalDialog } from '@/components/global-dialog-provider';
 import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
 
@@ -49,18 +45,18 @@ interface DashboardClientProps {
 
 export function DashboardClient({ initialData, quickInsight, user }: DashboardClientProps) {
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isChatDialogOpen, setIsChatDialogOpen] = useState(false);
-  const [isScanDialogOpen, setIsScanDialogOpen] = useState(false);
-  const [greeting, setGreeting] = useState('Morning');
+  const { openAddDialog, openChatDialog, openScanDialog } = useGlobalDialog();
   const router = useRouter();
 
-  useEffect(() => {
+  // Compute greeting at render time — no useEffect or state needed
+  const greeting = (() => {
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Morning');
-    else if (hour < 17) setGreeting('Afternoon');
-    else setGreeting('Evening');
-  }, []);
+    if (hour < 12) return 'Morning';
+    if (hour < 17) return 'Afternoon';
+    return 'Evening';
+  })();
+
+
 
   const totalBalance = initialData.wallets.reduce((acc, w) => acc + w.balance, 0);
 
@@ -74,31 +70,34 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
             className="text-4xl sm:text-[42px] tracking-tight"
             style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
           >
-            <span className="font-semibold text-foreground">{greeting}</span> <span className="text-muted-foreground">{user.full_name?.split(' ')[0] || 'User'}</span>
+            <span className="font-semibold text-foreground">{greeting}</span> <span className="text-zinc-400">{user.full_name?.split(' ')[0] || 'User'}</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-sm text-zinc-400 mt-2">
             here's your financial overview for this week.
           </p>
         </div>
         
         <div className="flex items-center gap-3 md:flex hidden">
            <Button 
-             onClick={() => setIsChatDialogOpen(true)}
+             onClick={openChatDialog}
              variant="outline"
+             aria-label="Chat AI Advisor"
              className="bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20 text-xs gap-2 h-10 px-5 rounded-full transition-all text-emerald-500"
            >
              <Sparkles className="w-4 h-4" /> Chat AI
            </Button>
            <Button 
-             onClick={() => setIsScanDialogOpen(true)}
+             onClick={openScanDialog}
              variant="outline"
+             aria-label="Scan Struk Belanja"
              className="bg-white/5 border-white/10 hover:bg-white/10 text-xs gap-2 h-10 px-5 rounded-full transition-all"
            >
              <Camera className="w-4 h-4" /> Scan Struk
            </Button>
            <Button 
-             onClick={() => setIsAddDialogOpen(true)}
-             className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 h-10 px-5 rounded-full transition-all"
+             onClick={openAddDialog}
+             aria-label="Add Transaction"
+             className="bg-emerald-700 hover:bg-emerald-800 text-white gap-2 h-10 px-5 rounded-full transition-all"
            >
              <Plus className="w-4 h-4" /> Add Transaction
            </Button>
@@ -211,7 +210,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                   <Receipt className="w-6 h-6 text-muted-foreground/40" />
                 </div>
                 <p className="text-sm text-muted-foreground">No transactions found</p>
-                <Button onClick={() => setIsAddDialogOpen(true)} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Add your first transaction</Button>
+                <Button onClick={openAddDialog} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Add your first transaction</Button>
               </div>
             )}
           </div>
@@ -238,7 +237,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
 
           {/* Quick Actions */}
           <div>
-            <p className="text-xs text-muted-foreground mb-4 uppercase tracking-widest font-semibold opacity-50">Quick Actions</p>
+            <p className="text-xs text-zinc-400 mb-4 uppercase tracking-widest font-bold">Quick Actions</p>
             <div className="grid grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
@@ -278,27 +277,10 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
 
       </div>
 
+      {/* TransferDialog is unique to the dashboard page */}
       <TransferDialog 
         open={isTransferDialogOpen} 
         onOpenChange={setIsTransferDialogOpen}
-        onSuccess={() => router.refresh()}
-      />
-
-      <AddTransactionDialog 
-        open={isAddDialogOpen} 
-        onOpenChange={setIsAddDialogOpen}
-        onSuccess={() => router.refresh()} 
-      />
-
-      <AIChatDialog 
-        open={isChatDialogOpen}
-        onOpenChange={setIsChatDialogOpen}
-        onSuccess={() => router.refresh()}
-      />
-
-      <ReceiptScannerDialog 
-        open={isScanDialogOpen}
-        onOpenChange={setIsScanDialogOpen}
         onSuccess={() => router.refresh()}
       />
 

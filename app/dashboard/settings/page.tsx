@@ -12,12 +12,13 @@ import { z } from "zod";
 import { useState, useEffect } from "react";
 import { updateProfile } from "@/app/actions/finance";
 import { toast } from "sonner";
-import { Check, User, Palette, Shield, Loader2, Code2, Globe, Instagram } from "lucide-react";
+import { Check, User, Palette, Shield, Loader2, Code2, Globe, Instagram, Scale } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { AvatarPicker } from "@/components/profile/avatar-picker";
 import { useMounted } from "@/hooks/use-mounted";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 const settingsSchema = z.object({
   full_name: z.string().max(100, "Name must be 100 characters or less").optional(),
@@ -194,6 +195,32 @@ export default function SettingsPage() {
                   Sign Out Account
                 </Button>
               </SignOutButton>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-slate-500/10 flex items-center justify-center">
+                <Shield className="h-4 w-4 text-slate-500" />
+              </div>
+              <h2 className="text-lg font-medium">Legal & Kebijakan</h2>
+            </div>
+            <div className="p-8 border border-border/50 rounded-3xl bg-card space-y-4 shadow-sm">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Tinjau dokumen kebijakan hukum dan perlindungan data pribadi Anda di Finanze.
+              </p>
+              <div className="grid grid-cols-1 gap-2.5 pt-2">
+                <Button variant="outline" className="w-full text-xs h-12 rounded-2xl transition-all font-bold justify-start px-4 gap-3 border-border/50 hover:bg-emerald-500/5 hover:text-emerald-600 dark:hover:text-emerald-500" asChild>
+                  <Link href="/privacy-policy">
+                    <Shield className="w-4 h-4 text-emerald-500" /> Kebijakan Privasi
+                  </Link>
+                </Button>
+                <Button variant="outline" className="w-full text-xs h-12 rounded-2xl transition-all font-bold justify-start px-4 gap-3 border-border/50 hover:bg-blue-500/5 hover:text-blue-600 dark:hover:text-blue-500" asChild>
+                  <Link href="/terms-of-service">
+                    <Scale className="w-4 h-4 text-blue-500" /> Syarat & Ketentuan
+                  </Link>
+                </Button>
+              </div>
             </div>
           </section>
 

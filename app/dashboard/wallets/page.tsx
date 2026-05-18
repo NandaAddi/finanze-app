@@ -144,9 +144,9 @@ export default function WalletsPage() {
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6">
             <WalletIcon className="h-8 w-8 text-muted-foreground opacity-50" />
           </div>
-          <h3 className="font-medium text-foreground text-lg mb-2">
+          <h2 className="font-medium text-foreground text-lg mb-2">
             {searchQuery ? 'No matching wallets' : 'No wallets found'}
-          </h3>
+          </h2>
           <p className="text-sm text-muted-foreground mb-8 max-w-[280px]">
             {searchQuery ? `We couldn't find any wallets matching "${searchQuery}"` : 'Add your bank account, cash, or e-wallet to start tracking.'}
           </p>
@@ -175,7 +175,7 @@ export default function WalletsPage() {
                 </div>
                 
                 <div className="md:mt-6">
-                  <h3 className="text-sm md:text-lg font-semibold text-foreground mb-0.5 transition-colors">{wallet.name}</h3>
+                  <h2 className="text-sm md:text-lg font-semibold text-foreground mb-0.5 transition-colors">{wallet.name}</h2>
                   <p className="text-[10px] md:text-sm text-muted-foreground line-clamp-1 md:line-clamp-2 leading-relaxed md:mb-4">
                     {wallet.description || 'No description provided.'}
                   </p>

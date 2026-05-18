@@ -118,7 +118,7 @@ export default function TransactionsPage() {
         
         <Button 
           onClick={() => setIsAddDialogOpen(true)}
-          className="h-10 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-2 transition-all hidden md:flex"
+          className="h-10 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold gap-2 transition-all hidden md:flex"
         >
           <Plus className="h-4 w-4" /> Add Transaction
         </Button>

@@ -4,6 +4,33 @@ export async function POST(req: Request) {
   try {
     const { fileName, content, path } = await req.json();
 
+    if (!content || typeof content !== 'string') {
+      return NextResponse.json({ error: 'Invalid file content payload' }, { status: 400 });
+    }
+
+    // 1. Validasi Ukuran Berkas (Maksimal 5MB)
+    // 5MB = 5 * 1024 * 1024 bytes = 5,242,880 bytes
+    // Ukuran asli dalam byte = (panjang base64 * 3) / 4
+    const approxSizeBytes = (content.length * 3) / 4;
+    if (approxSizeBytes > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: 'Ukuran berkas melebihi batas maksimal 5MB' }, { status: 400 });
+    }
+
+    // 2. Validasi Tipe Berkas (Hanya Gambar lewat Magic Number Base64)
+    const allowedSignatures = [
+      '/9j/',       // JPEG
+      'iVBORw0KGgo', // PNG
+      'UklGR',       // WebP
+      'R0lGOD',      // GIF
+      'PHN2Zy',      // SVG (<svg)
+      'PD94bW',      // SVG (<?xml)
+    ];
+    
+    const isAllowedImage = allowedSignatures.some(sig => content.startsWith(sig));
+    if (!isAllowedImage) {
+      return NextResponse.json({ error: 'Format berkas tidak diizinkan. Hanya menerima gambar (WebP, PNG, JPEG, SVG, GIF)' }, { status: 400 });
+    }
+
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const GITHUB_REPO = process.env.GITHUB_REPO; // e.g. "nandaaddi/kanba-assets"
     const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';

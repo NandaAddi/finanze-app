@@ -1,3 +1,9 @@
+/**
+ * @deprecated DEAD CODE — This component is not imported or used anywhere.
+ * Notification functionality is handled by top-nav.tsx (via getNotifications server action).
+ * This file previously created a Supabase Realtime WebSocket subscription on mount,
+ * consuming network resources unnecessarily. Safe to delete.
+ */
 "use client";
 
 import React, { useState, useEffect } from "react";

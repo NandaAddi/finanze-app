@@ -10,6 +10,7 @@ import { AccentThemeProvider } from '@/components/accent-theme-provider';
 import { Analytics } from "@vercel/analytics/next"
 import { TransitionProvider } from '@/components/transition-provider';
 import { Suspense } from 'react';
+import { CookieConsent } from '@/components/cookie-consent';
 
 const lora = Lora({
   subsets: ['latin'],
@@ -62,6 +63,7 @@ export const metadata: Metadata = {
 };
 
 import { ClerkProvider } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
 
 export default function RootLayout({
   children,
@@ -69,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{ baseTheme: dark }}>
       <html
         lang="en"
         suppressHydrationWarning
@@ -77,7 +79,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} ${lora.variable}`}
       >
         <body className={`${GeistSans.className} antialiased`}>
-          <Analytics />
+          {process.env.VERCEL === '1' && <Analytics />}
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AccentThemeProvider>
               <UserProvider>
@@ -87,6 +89,7 @@ export default function RootLayout({
                   </TransitionProvider>
                 </Suspense>
                 <Toaster position="top-center" richColors closeButton />
+                <CookieConsent />
               </UserProvider>
             </AccentThemeProvider>
           </ThemeProvider>

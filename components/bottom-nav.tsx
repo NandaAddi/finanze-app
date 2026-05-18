@@ -47,10 +47,12 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
       )}
 
       {/* Quick Action Buttons (The Hub) */}
-      <div className={cn(
-        "absolute bottom-28 left-0 right-0 flex justify-center gap-4 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none px-4",
-        isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-75"
-      )}>
+      <div
+        style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+        className={cn(
+          "absolute bottom-28 left-0 right-0 flex justify-center gap-4 transition-all duration-500 pointer-events-none px-4",
+          isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-75"
+        )}>
         {quickActions.map((action, i) => (
           <div 
             key={i} 
@@ -64,6 +66,7 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
                 action.onClick();
                 setIsOpen(false);
               }}
+              aria-label={action.label}
               className="w-12 h-12 rounded-2xl flex items-center justify-center bg-card/90 backdrop-blur-lg border border-border/50 text-foreground shadow-2xl active:scale-90 transition-all hover:border-emerald-500/30 group relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-emerald-500/0 group-hover:bg-emerald-500/5 transition-colors" />
@@ -84,6 +87,7 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
               <div key={i} className="relative -mt-10">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
+                  aria-label={isOpen ? "Tutup menu aksi" : "Buka menu aksi cepat"}
                   className={cn(
                     "w-16 h-16 rounded-[22px] flex items-center justify-center text-white shadow-[0_15px_30px_rgba(16,185,129,0.25)] active:scale-95 transition-all duration-500 relative overflow-hidden group",
                     isOpen 
@@ -104,7 +108,7 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
           return (
             <Link
               key={i}
-              href={item.href}
+              href={item.href ?? '/dashboard'}
               className={cn(
                 "flex flex-col items-center justify-center gap-1.5 transition-all px-4 py-3 rounded-2xl min-w-[70px] active:bg-white/5",
                 isActive ? "text-emerald-500" : "text-muted-foreground opacity-40"

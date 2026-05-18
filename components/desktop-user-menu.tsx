@@ -9,7 +9,9 @@ import {
   User, 
   ChevronDown, 
   Github,
-  Globe
+  Globe,
+  ShieldCheck,
+  Scale
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -23,6 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useMounted } from "@/hooks/use-mounted";
+import { getOptimizedAvatarUrl } from "@/lib/utils";
 
 export function DesktopUserMenu() {
   const { user } = useUser();
@@ -36,7 +39,7 @@ export function DesktopUserMenu() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-10 gap-3 px-2 hover:bg-muted/50 rounded-full transition-all">
             <Avatar className="h-8 w-8 border border-border/10 shadow-sm">
-              <AvatarImage src={user?.avatar_url} />
+              <AvatarImage src={getOptimizedAvatarUrl(user?.avatar_url)} alt={user?.full_name || "User Avatar"} className="object-cover" />
               <AvatarFallback className="bg-emerald-500/10 text-emerald-500 text-xs font-bold">
                 {user?.full_name?.[0]?.toUpperCase() || 'U'}
               </AvatarFallback>
@@ -67,6 +70,19 @@ export function DesktopUserMenu() {
               <Globe className="mr-3 h-4 w-4 text-muted-foreground" />
               <span className="text-xs">Informasi Pengembang</span>
             </a>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="bg-border/10" />
+          <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
+            <Link href="/privacy-policy" className="flex items-center w-full">
+              <ShieldCheck className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="text-xs">Kebijakan Privasi</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
+            <Link href="/terms-of-service" className="flex items-center w-full">
+              <Scale className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span className="text-xs">Syarat & Ketentuan</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="bg-border/10" />
           <SignOutButton>

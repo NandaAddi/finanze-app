@@ -13,6 +13,15 @@ const nextConfig = {
     };
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: '/login',
+        destination: '/sign-in',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

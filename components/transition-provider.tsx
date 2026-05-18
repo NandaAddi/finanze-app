@@ -11,18 +11,9 @@ const TransitionContext = createContext({
 export const useTransition = () => useContext(TransitionContext);
 
 export function TransitionProvider({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  // Initial load effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500); // Show for at least 1.5s for that elegant feel
-
-    return () => clearTimeout(timer);
-  }, []);
 
   // Optional: Show on route change
   useEffect(() => {

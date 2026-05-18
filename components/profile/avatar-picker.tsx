@@ -7,6 +7,7 @@ import { Camera, RefreshCw, Upload, Loader2 } from "lucide-react";
 import { compressAndConvertToWebP } from "@/lib/image-utils";
 import { toast } from "sonner";
 import { useMounted } from "@/hooks/use-mounted";
+import { getOptimizedAvatarUrl } from "@/lib/utils";
 
 interface AvatarPickerProps {
   currentAvatar?: string;
@@ -73,7 +74,7 @@ export function AvatarPicker({ currentAvatar, onAvatarChange, userName }: Avatar
   return (
     <div className="relative group">
       <Avatar className="h-24 w-24 border-4 border-background ring-2 ring-primary/20">
-        <AvatarImage src={currentAvatar} alt="Profile" className="object-cover" />
+        <AvatarImage src={getOptimizedAvatarUrl(currentAvatar, 128)} alt="Profile" className="object-cover" />
         <AvatarFallback className="text-xl bg-primary/10 text-primary font-bold">
           {mounted ? (userName?.[0]?.toUpperCase() || "?") : "?"}
         </AvatarFallback>
