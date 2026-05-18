@@ -21,7 +21,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const settingsSchema = z.object({
-  full_name: z.string().max(100, "Name must be 100 characters or less").optional(),
+  full_name: z.string().max(100, "Nama tidak boleh lebih dari 100 karakter").optional(),
   avatar_url: z.string().url("Invalid URL").or(z.literal("")).optional(),
 });
 
@@ -63,9 +63,9 @@ export default function SettingsPage() {
       if (!result.success) throw new Error(result.error);
       
       await refreshUser();
-      toast.success("Settings updated successfully!");
+      toast.success("Pengaturan berhasil disimpan!");
     } catch (err: any) {
-      toast.error("Failed to update: " + err.message);
+      toast.error("Gagal menyimpan: " + err.message);
     } finally {
       setSaving(false);
     }
@@ -81,7 +81,7 @@ export default function SettingsPage() {
     <div className="max-w-4xl mx-auto py-12 px-4 space-y-12 animate-fade-in pb-20">
       <div>
         <h1 className="text-4xl font-semibold tracking-tight" style={{ fontFamily: 'var(--font-lora), serif' }}>
-          Settings
+          Pengaturan
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">Kelola preferensi akun dan tampilan aplikasi Anda.</p>
       </div>
@@ -93,12 +93,12 @@ export default function SettingsPage() {
               <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
                 <User className="h-4 w-4 text-emerald-500" />
               </div>
-              <h2 className="text-xl font-medium">Profile Customization</h2>
+              <h2 className="text-xl font-medium">Kustomisasi Profil</h2>
             </div>
             
             <div className="p-8 border border-border/50 rounded-3xl bg-card space-y-10 shadow-sm">
               <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground opacity-60">Profile Picture</label>
+                <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground opacity-60">Foto Profil</label>
                 <div className="flex items-center gap-8">
                   <AvatarPicker 
                     currentAvatar={form.watch("avatar_url")} 
@@ -120,11 +120,11 @@ export default function SettingsPage() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid grid-cols-1 gap-6">
                     <FormItem>
-                      <FormLabel className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground opacity-60">Full Name</FormLabel>
+                      <FormLabel className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground opacity-60">Nama Lengkap</FormLabel>
                       <FormControl>
                         <Input
                           {...form.register("full_name")}
-                          placeholder="Enter your name"
+                          placeholder="Masukkan nama Anda"
                           disabled={saving}
                           className="bg-transparent border-border/50 h-12 rounded-xl focus:border-emerald-500/50"
                         />
@@ -136,7 +136,7 @@ export default function SettingsPage() {
                   <div className="pt-2">
                     <Button type="submit" disabled={saving || !form.formState.isDirty} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-8 h-12 shadow-lg shadow-emerald-600/20 transition-all active:scale-95">
                       {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Check className="w-4 h-4 mr-2" />}
-                      Save Changes
+                      Simpan Perubahan
                     </Button>
                   </div>
                 </form>
@@ -149,17 +149,17 @@ export default function SettingsPage() {
               <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center">
                 <Palette className="h-4 w-4 text-blue-500" />
               </div>
-              <h2 className="text-xl font-medium">Appearance</h2>
+              <h2 className="text-xl font-medium">Tampilan</h2>
             </div>
             
             <div className="p-8 border border-border/50 rounded-3xl bg-card space-y-8 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <label className="text-sm font-medium">Dark Mode</label>
+                  <label className="text-sm font-medium">Mode Gelap</label>
                   <p className="text-xs text-muted-foreground">Beralih antara tema terang dan gelap.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold opacity-40">Off</span>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold opacity-40">Mati</span>
                   {mounted ? (
                     <Switch
                       checked={theme === "dark"}
@@ -168,7 +168,7 @@ export default function SettingsPage() {
                   ) : (
                     <div className="w-11 h-6 bg-muted animate-pulse rounded-full" />
                   )}
-                  <span className="text-[10px] text-emerald-500 uppercase tracking-widest font-bold">On</span>
+                  <span className="text-[10px] text-emerald-500 uppercase tracking-widest font-bold">Nyala</span>
                 </div>
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function SettingsPage() {
               <div className="w-8 h-8 rounded-full bg-rose-500/10 flex items-center justify-center">
                 <Shield className="h-4 w-4 text-rose-500" />
               </div>
-              <h2 className="text-lg font-medium">Account</h2>
+              <h2 className="text-lg font-medium">Akun</h2>
             </div>
             <div className="p-8 border border-border/50 rounded-3xl bg-card space-y-6 shadow-sm">
               <div className="space-y-1">
@@ -192,7 +192,7 @@ export default function SettingsPage() {
               </div>
               <SignOutButton>
                 <Button variant="outline" className="w-full text-xs border-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-white h-12 rounded-2xl transition-all font-bold">
-                  Sign Out Account
+                  Keluar dari Akun
                 </Button>
               </SignOutButton>
             </div>
@@ -229,7 +229,7 @@ export default function SettingsPage() {
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                 <Code2 className="h-4 w-4 text-primary" />
               </div>
-              <h2 className="text-lg font-medium">Developer</h2>
+              <h2 className="text-lg font-medium">Pengembang</h2>
             </div>
             <div className="p-8 border border-border/50 rounded-3xl bg-emerald-500/5 space-y-6 shadow-sm relative overflow-hidden">
                <div className="relative z-10 space-y-4">

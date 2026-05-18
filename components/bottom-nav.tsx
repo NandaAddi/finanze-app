@@ -20,11 +20,11 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
   const mounted = useMounted();
 
   const navItems = [
-    { icon: Home, label: 'Home', href: '/dashboard' },
-    { icon: Receipt, label: 'History', href: '/dashboard/transactions' },
-    { icon: Plus, label: 'Add', isPlus: true },
-    { icon: BarChart3, label: 'Analytics', href: '/dashboard/analytics' },
-    { icon: Wallet, label: 'Wallets', href: '/dashboard/wallets' },
+    { icon: Home, label: 'Beranda', href: '/dashboard' },
+    { icon: Receipt, label: 'Riwayat', href: '/dashboard/transactions' },
+    { icon: Plus, label: 'Tambah', isPlus: true },
+    { icon: BarChart3, label: 'Analitik', href: '/dashboard/analytics' },
+    { icon: Wallet, label: 'Dompet', href: '/dashboard/wallets' },
   ];
 
   const quickActions = [

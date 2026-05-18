@@ -34,7 +34,7 @@ export default function AIAdvisorPage() {
           <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-3 md:mb-4" style={{ fontFamily: 'var(--font-lora), serif' }}>
-          AI Financial Advisor
+          Penasihat Keuangan AI
         </h1>
         <p className="text-muted-foreground max-w-lg leading-relaxed text-xs md:text-sm px-4">
           Dapatkan analisis mendalam dan rekomendasi cerdas berdasarkan pola transaksi Anda menggunakan kekuatan Alibaba AI (Qwen).

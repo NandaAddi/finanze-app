@@ -52,12 +52,12 @@ interface AppSidebarProps {
 }
 
 const menuItems = [
-  { title: "Dashboard",    url: "/dashboard",           icon: Home },
-  { title: "Wallets",      url: "/dashboard/wallets",   icon: WalletIcon },
-  { title: "Transactions", url: "/dashboard/transactions",icon: ReceiptIcon },
-  { title: "Analytics",    url: "/dashboard/analytics", icon: BarChartIcon },
+  { title: "Dasbor",    url: "/dashboard",           icon: Home },
+  { title: "Dompet",      url: "/dashboard/wallets",   icon: WalletIcon },
+  { title: "Riwayat Transaksi", url: "/dashboard/transactions",icon: ReceiptIcon },
+  { title: "Analitik",    url: "/dashboard/analytics", icon: BarChartIcon },
   { title: "AI Advisor",    url: "/dashboard/ai-advisor", icon: Sparkles },
-  { title: "Settings",     url: "/dashboard/settings",  icon: SettingsIcon },
+  { title: "Pengaturan",     url: "/dashboard/settings",  icon: SettingsIcon },
 ]
 
 export function AppSidebar({ initialUser }: AppSidebarProps) {
@@ -76,10 +76,10 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast.success('Signed out successfully');
+      toast.success('Berhasil keluar');
       router.push('/sign-in');
     } catch (error) {
-      toast.error('Failed to sign out');
+      toast.error('Gagal keluar');
     }
   };
 
@@ -154,25 +154,25 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               {mounted && theme === 'dark' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-              {mounted && theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              {mounted && theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border/30" />
             <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer" asChild>
               <Link href="/privacy-policy" className="flex items-center w-full gap-2">
                 <ShieldCheck className="h-3.5 w-3.5 text-muted-foreground" />
-                Privacy Policy
+                Kebijakan Privasi
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer" asChild>
               <Link href="/terms-of-service" className="flex items-center w-full gap-2">
                 <Scale className="h-3.5 w-3.5 text-muted-foreground" />
-                Terms of Service
+                Syarat & Ketentuan
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border/30" />
             <DropdownMenuItem className="text-xs gap-2 py-2 cursor-pointer text-destructive focus:text-destructive" onClick={handleSignOut}>
               <LogOutIcon className="h-3.5 w-3.5" />
-              Sign out
+              Keluar
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

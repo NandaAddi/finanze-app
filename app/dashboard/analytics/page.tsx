@@ -72,8 +72,8 @@ export default function AnalyticsPage() {
         amount: t.amount,
         type: t.type as any,
         description: t.description || '',
-        category_name: (t.category as any)?.name || 'Uncategorized',
-        wallet_name: (t.wallet as any)?.name || 'Unknown Wallet',
+        category_name: (t.category as any)?.name || 'Tanpa Kategori',
+        wallet_name: (t.wallet as any)?.name || 'Dompet Tidak Diketahui',
         created_at: typeof t.created_at === 'string' ? t.created_at : new Date(t.created_at).toISOString()
       })) || []);
 
@@ -153,20 +153,20 @@ export default function AnalyticsPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           <h1 className="text-4xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
-            <span className="font-semibold text-foreground">Financial Analytics</span>
+            <span className="font-semibold text-foreground">Analitik Keuangan</span>
           </h1>
-          <p className="text-[13px] text-muted-foreground mt-2">Deep dive into your spending habits and net worth trends.</p>
+          <p className="text-[13px] text-muted-foreground mt-2">Analisis mendalam pola pengeluaran dan tren kekayaan Anda.</p>
         </div>
         
         <div className="flex items-center gap-3">
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger className="w-[140px] h-9 bg-card border-border/50 text-xs rounded-full">
-              <SelectValue placeholder="Time Range" />
+              <SelectValue placeholder="Rentang Waktu" />
             </SelectTrigger>
             <SelectContent className="bg-popover border-border/50 text-xs">
-              <SelectItem value="3">Last 3 Months</SelectItem>
-              <SelectItem value="6">Last 6 Months</SelectItem>
-              <SelectItem value="12">Last 12 Months</SelectItem>
+              <SelectItem value="3">3 Bulan Terakhir</SelectItem>
+              <SelectItem value="6">6 Bulan Terakhir</SelectItem>
+              <SelectItem value="12">12 Bulan Terakhir</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -176,40 +176,40 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <Card className="bg-card border-border/50 shadow-none overflow-hidden group">
           <CardContent className="p-6">
-            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Net Worth</p>
+            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Kekayaan Bersih</p>
             <h3 className="text-2xl font-light text-foreground tracking-tighter" style={{ fontFamily: 'var(--font-lora), serif' }}>
               Rp {totalBalance.toLocaleString('id-ID')}
             </h3>
             <div className="mt-4 flex items-center gap-2 text-emerald-500">
               <TrendingUp className="w-3 h-3" />
-              <span className="text-[10px] font-medium">+4.2% from last month</span>
+              <span className="text-[10px] font-medium">+4.2% dari bulan lalu</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="bg-card border-border/50 shadow-none overflow-hidden group">
           <CardContent className="p-6">
-            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Income</p>
+            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Pemasukan</p>
             <h3 className="text-2xl font-light text-emerald-500 tracking-tighter" style={{ fontFamily: 'var(--font-lora), serif' }}>
               Rp {totalIncome.toLocaleString('id-ID')}
             </h3>
-            <p className="text-[10px] text-muted-foreground/40 mt-4 uppercase tracking-widest">In the last {timeRange} months</p>
+            <p className="text-[10px] text-muted-foreground/40 mt-4 uppercase tracking-widest">Dalam {timeRange} bulan terakhir</p>
           </CardContent>
         </Card>
 
         <Card className="bg-card border-border/50 shadow-none overflow-hidden group">
           <CardContent className="p-6">
-            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Expenses</p>
+            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Total Pengeluaran</p>
             <h3 className="text-2xl font-light text-rose-500 tracking-tighter" style={{ fontFamily: 'var(--font-lora), serif' }}>
               Rp {totalExpense.toLocaleString('id-ID')}
             </h3>
-            <p className="text-[10px] text-muted-foreground/40 mt-4 uppercase tracking-widest">In the last {timeRange} months</p>
+            <p className="text-[10px] text-muted-foreground/40 mt-4 uppercase tracking-widest">Dalam {timeRange} bulan terakhir</p>
           </CardContent>
         </Card>
 
         <Card className="bg-card border-border/50 shadow-none overflow-hidden group">
           <CardContent className="p-6">
-            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Savings Rate</p>
+            <p className="text-[10px] text-muted-foreground/50 mb-3 uppercase tracking-[0.2em] font-bold">Tingkat Tabungan</p>
             <h3 className="text-2xl font-light text-primary tracking-tighter" style={{ fontFamily: 'var(--font-lora), serif' }}>
               {savingsRate}%
             </h3>
@@ -227,7 +227,7 @@ export default function AnalyticsPage() {
         {/* Cash Flow */}
         <div className="lg:col-span-2">
           <h3 className="text-sm font-medium text-foreground mb-4 md:mb-6 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-muted-foreground" /> Monthly Cash Flow
+            <Activity className="w-4 h-4 text-muted-foreground" /> Arus Kas Bulanan
           </h3>
           <div className="h-auto w-full bg-card border border-border/50 rounded-xl overflow-hidden shadow-sm">
             <CashFlowChart data={cashFlowData} />
@@ -237,7 +237,7 @@ export default function AnalyticsPage() {
         {/* Category Distribution */}
         <div>
           <h3 className="text-sm font-medium text-foreground mb-4 md:mb-6 flex items-center gap-2">
-            <PieChartIcon className="w-4 h-4 text-muted-foreground" /> Spending by Category
+            <PieChartIcon className="w-4 h-4 text-muted-foreground" /> Pengeluaran per Kategori
           </h3>
           <div className="h-auto w-full bg-card border border-border/50 rounded-xl overflow-hidden shadow-sm">
             <CategoryPieChart data={categoryData} />
@@ -250,7 +250,7 @@ export default function AnalyticsPage() {
         <Card className="bg-card border-border/50 shadow-none col-span-1">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <WalletIcon className="w-4 h-4 text-muted-foreground" /> Wallet Allocation
+              <WalletIcon className="w-4 h-4 text-muted-foreground" /> Alokasi Dompet
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
@@ -261,7 +261,7 @@ export default function AnalyticsPage() {
         <Card className="bg-card border-border/50 shadow-none col-span-2">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Activity className="w-4 h-4 text-muted-foreground" /> Financial Insights
+              <Activity className="w-4 h-4 text-muted-foreground" /> Wawasan Keuangan
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -271,9 +271,9 @@ export default function AnalyticsPage() {
                   <TrendingUp className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">Strong Savings Pace</p>
+                  <p className="text-sm font-medium text-foreground">Tabungan Cukup Kuat</p>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Your savings rate is {savingsRate}% this month, which is above your average. Great job staying disciplined!
+                    Tingkat tabungan Anda bulan ini mencapai {savingsRate}%, yang berada di atas rata-rata. Bagus sekali, tetap pertahankan!
                   </p>
                 </div>
               </div>
@@ -283,9 +283,9 @@ export default function AnalyticsPage() {
                   <ArrowUpRight className="w-5 h-5 text-rose-500" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">Expense Peak Detected</p>
+                  <p className="text-sm font-medium text-foreground">Lonjakan Pengeluaran</p>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Spending in the <span className="text-foreground font-medium">Entertainment</span> category has increased by 40% compared to last month.
+                    Pengeluaran di kategori <span className="text-foreground font-medium">Hiburan</span> meningkat 40% dari bulan lalu.
                   </p>
                 </div>
               </div>
@@ -295,9 +295,9 @@ export default function AnalyticsPage() {
                   <Calendar className="w-5 h-5 text-blue-500" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">Upcoming Bills</p>
+                  <p className="text-sm font-medium text-foreground">Tagihan Mendatang</p>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Based on your patterns, you have approximately Rp 2,500,000 in recurring bills due in the next 10 days.
+                    Berdasarkan pola Anda, ada sekitar Rp 2.500.000 tagihan rutin yang jatuh tempo dalam 10 hari ke depan.
                   </p>
                 </div>
               </div>

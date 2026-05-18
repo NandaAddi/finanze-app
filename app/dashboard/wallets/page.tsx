@@ -51,7 +51,7 @@ export default function WalletsPage() {
       setWallets(data as any || []);
     } catch (error) {
       console.error('Error loading wallets:', error);
-      toast.error('Failed to load wallets');
+      toast.error('Gagal memuat dompet');
     } finally {
       setLoading(false);
     }
@@ -61,15 +61,15 @@ export default function WalletsPage() {
     e.stopPropagation();
     if (!user?.id) return;
     
-    if (!confirm('Are you sure you want to delete this wallet and all its transactions?')) return;
+    if (!confirm('Apakah Anda yakin ingin menghapus dompet ini beserta seluruh transaksinya?')) return;
 
     try {
       const result = await deleteWallet(id);
       if (!result.success) throw new Error(result.error);
-      toast.success('Wallet deleted');
+      toast.success('Dompet berhasil dihapus');
       loadWallets();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete wallet');
+      toast.error(error.message || 'Gagal menghapus dompet');
     }
   };
 
@@ -95,10 +95,10 @@ export default function WalletsPage() {
             className="text-4xl sm:text-[42px] tracking-tight"
             style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
           >
-            <span className="font-semibold text-foreground">Wallets</span>
+            <span className="font-semibold text-foreground">Dompet</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Manage your accounts, bank, and digital wallets.
+            Kelola rekening bank, uang tunai, dan dompet digital Anda.
           </p>
         </div>
         <div className="flex items-center gap-2 mt-2 md:mt-0">
@@ -108,7 +108,7 @@ export default function WalletsPage() {
             className="h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 md:px-5 transition-all active:scale-95"
           >
             <Plus className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:inline text-xs font-semibold">New Wallet</span>
+            <span className="hidden md:inline text-xs font-semibold">Dompet Baru</span>
           </Button>
         </div>
       </div>
@@ -118,7 +118,7 @@ export default function WalletsPage() {
          <div className="relative w-full sm:max-w-xs">
            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
            <Input 
-             placeholder="Search wallets..." 
+             placeholder="Cari dompet..." 
              className="pl-8 h-9 bg-card border-border/50 text-[13px] focus-visible:ring-0"
              value={searchQuery}
              onChange={(e) => setSearchQuery(e.target.value)}
@@ -145,10 +145,10 @@ export default function WalletsPage() {
             <WalletIcon className="h-8 w-8 text-muted-foreground opacity-50" />
           </div>
           <h2 className="font-medium text-foreground text-lg mb-2">
-            {searchQuery ? 'No matching wallets' : 'No wallets found'}
+            {searchQuery ? 'Dompet tidak ditemukan' : 'Belum ada dompet'}
           </h2>
           <p className="text-sm text-muted-foreground mb-8 max-w-[280px]">
-            {searchQuery ? `We couldn't find any wallets matching "${searchQuery}"` : 'Add your bank account, cash, or e-wallet to start tracking.'}
+            {searchQuery ? `Tidak ada dompet yang cocok dengan "${searchQuery}"` : 'Tambahkan rekening bank, uang tunai, atau e-wallet untuk mulai.'}
           </p>
           {!searchQuery ? (
             <Button 
@@ -157,7 +157,7 @@ export default function WalletsPage() {
               onClick={() => router.push('/dashboard/wallets/new')}
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add First Wallet
+              Tambah Dompet Pertama
             </Button>
           ) : null}
         </div>
@@ -177,7 +177,7 @@ export default function WalletsPage() {
                 <div className="md:mt-6">
                   <h2 className="text-sm md:text-lg font-semibold text-foreground mb-0.5 transition-colors">{wallet.name}</h2>
                   <p className="text-[10px] md:text-sm text-muted-foreground line-clamp-1 md:line-clamp-2 leading-relaxed md:mb-4">
-                    {wallet.description || 'No description provided.'}
+                    {wallet.description || 'Tidak ada deskripsi.'}
                   </p>
                   <p className="text-lg md:text-2xl font-bold text-foreground tracking-tight md:hidden" style={{ fontFamily: 'var(--font-lora), serif' }}>
                     Rp {wallet.balance.toLocaleString('id-ID')}
@@ -194,10 +194,10 @@ export default function WalletsPage() {
               <div className="hidden md:flex mt-8 pt-4 border-t border-border/10 items-center justify-between">
                 <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <Calendar className="w-3 h-3" />
-                  {new Date(wallet.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {new Date(wallet.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' })}
                 </div>
                 <div className="text-[11px] font-medium text-muted-foreground group-hover:text-foreground transition-all flex items-center gap-1">
-                  Details <ArrowUpRight className="w-3 h-3" />
+                  Detail <ArrowUpRight className="w-3 h-3" />
                 </div>
               </div>
 

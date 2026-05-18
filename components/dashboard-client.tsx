@@ -51,9 +51,9 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
   // Compute greeting at render time — no useEffect or state needed
   const greeting = (() => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Morning';
-    if (hour < 17) return 'Afternoon';
-    return 'Evening';
+    if (hour < 12) return 'Selamat Pagi';
+    if (hour < 17) return 'Selamat Siang';
+    return 'Selamat Malam';
   })();
 
 
@@ -73,7 +73,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
             <span className="font-semibold text-foreground">{greeting}</span> <span className="text-zinc-400">{user.full_name?.split(' ')[0] || 'User'}</span>
           </h1>
           <p className="text-sm text-zinc-400 mt-2">
-            here's your financial overview for this week.
+            berikut ringkasan keuangan Anda minggu ini.
           </p>
         </div>
         
@@ -96,10 +96,10 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
            </Button>
            <Button 
              onClick={openAddDialog}
-             aria-label="Add Transaction"
+             aria-label="Tambah Transaksi"
              className="bg-emerald-700 hover:bg-emerald-800 text-white gap-2 h-10 px-5 rounded-full transition-all"
            >
-             <Plus className="w-4 h-4" /> Add Transaction
+             <Plus className="w-4 h-4" /> Tambah Transaksi
            </Button>
         </div>
       </div>
@@ -111,7 +111,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
             <PiggyBank className="w-12 h-12" />
           </div>
           <CardContent className="p-6">
-            <p className="text-xs text-muted-foreground mb-4 flex items-center gap-2">Total Balance</p>
+            <p className="text-xs text-muted-foreground mb-4 flex items-center gap-2">Total Saldo</p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-foreground mb-1 break-all" style={{ fontFamily: 'var(--font-lora), serif' }}>
               Rp {totalBalance.toLocaleString('id-ID')}
             </h2>
@@ -119,14 +119,14 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
               <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 font-normal">
                 <ArrowUpRight className="w-3 h-3 mr-1" /> +12.5%
               </Badge>
-              <span className="text-[10px] text-muted-foreground">vs last month</span>
+              <span className="text-[10px] text-muted-foreground">vs bulan lalu</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="bg-card border-border/50 shadow-none overflow-hidden relative">
           <CardContent className="p-6">
-            <p className="text-xs text-muted-foreground mb-4">Weekly Expenses</p>
+            <p className="text-xs text-muted-foreground mb-4">Pengeluaran Mingguan</p>
             <WeeklyExpenseChart data={initialData.weeklySpending} />
             <p className="text-lg font-medium text-rose-500 mt-2">
               Rp {Math.max(...initialData.weeklySpending.map(d => d.amount), 0).toLocaleString('id-ID')} <span className="text-xs text-muted-foreground font-normal">peak</span>
@@ -136,7 +136,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
 
         <Card className="bg-card border-border/50 shadow-none overflow-hidden relative">
           <CardContent className="p-6">
-            <p className="text-xs text-muted-foreground mb-4">Quick Navigation</p>
+            <p className="text-xs text-muted-foreground mb-4">Navigasi Cepat</p>
             <div className="flex md:grid md:grid-cols-2 gap-3 overflow-x-auto pb-2 md:pb-0 no-scrollbar snap-x">
               {initialData.wallets.map(w => (
                 <button 
@@ -155,7 +155,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                 onClick={() => router.push('/dashboard/wallets')}
                 className="flex items-center justify-center p-4 rounded-2xl border border-dashed border-border/50 hover:border-border transition-all text-[10px] text-muted-foreground min-w-[140px] md:min-w-0 snap-center"
               >
-                View all wallets
+                Lihat semua dompet
               </button>
             </div>
           </CardContent>
@@ -169,9 +169,9 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-medium flex items-center gap-2">
-              <Receipt className="w-4 h-4 text-muted-foreground" /> Recent Transactions
+              <Receipt className="w-4 h-4 text-muted-foreground" /> Transaksi Terakhir
             </h3>
-            <Button onClick={() => router.push('/dashboard/transactions')} variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">View all</Button>
+            <Button onClick={() => router.push('/dashboard/transactions')} variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">Lihat semua</Button>
           </div>
           
           <div className="space-y-[1px] bg-border/10 rounded-lg overflow-hidden border border-border/50">
@@ -184,9 +184,9 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                     {t.type === 'INCOME' ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">{t.description || 'Untitled Transaction'}</p>
+                    <p className="text-sm font-medium text-foreground">{t.description || 'Transaksi Tanpa Nama'}</p>
                     <p className="text-xs text-muted-foreground flex items-center gap-2">
-                      {t.category?.name || 'Uncategorized'} • {format(new Date(t.created_at), 'MMM dd, HH:mm')}
+                      {t.category?.name || 'Tanpa Kategori'} • {format(new Date(t.created_at), 'MMM dd, HH:mm')}
                     </p>
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                     {t.type === 'INCOME' ? '+' : '-'} Rp {t.amount.toLocaleString('id-ID')}
                   </p>
                   <button
-                    aria-label={`More options for ${t.description || 'transaction'}`}
+                    aria-label={`Opsi lainnya untuk ${t.description || 'transaksi'}`}
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
@@ -209,8 +209,8 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
                   <Receipt className="w-6 h-6 text-muted-foreground/40" />
                 </div>
-                <p className="text-sm text-muted-foreground">No transactions found</p>
-                <Button onClick={openAddDialog} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Add your first transaction</Button>
+                <p className="text-sm text-muted-foreground">Tidak ada transaksi</p>
+                <Button onClick={openAddDialog} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Tambah transaksi pertama Anda</Button>
               </div>
             )}
           </div>
@@ -229,15 +229,15 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                 "{quickInsight || "Menganalisis pola transaksi Anda..."}"
               </p>
               <div className="mt-6 flex justify-between items-center">
-                <button className="text-[10px] text-muted-foreground hover:text-foreground">View budget plan</button>
-                <button className="text-[10px] text-muted-foreground hover:text-foreground">Dismiss</button>
+                <button className="text-[10px] text-muted-foreground hover:text-foreground">Lihat rencana anggaran</button>
+                <button className="text-[10px] text-muted-foreground hover:text-foreground">Tutup</button>
               </div>
             </CardContent>
           </Card>
 
           {/* Quick Actions */}
           <div>
-            <p className="text-xs text-zinc-400 mb-4 uppercase tracking-widest font-bold">Quick Actions</p>
+            <p className="text-xs text-zinc-400 mb-4 uppercase tracking-widest font-bold">Aksi Cepat</p>
             <div className="grid grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
@@ -249,27 +249,27 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => toast.info('Savings feature coming soon!')}
+                onClick={() => toast.info('Fitur tabungan akan segera hadir!')}
                 className="bg-card border-border/50 text-xs h-20 flex-col gap-2 hover:bg-muted/50 transition-all"
               >
                 <PiggyBank className="w-4 h-4 text-muted-foreground" />
-                Save
+                Nabung
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => toast.info('Investment tracking coming soon!')}
+                onClick={() => toast.info('Fitur pantau investasi akan segera hadir!')}
                 className="bg-card border-border/50 text-xs h-20 flex-col gap-2 hover:bg-muted/50 transition-all"
               >
                 <TrendingUp className="w-4 h-4 text-muted-foreground" />
-                Invest
+                Investasi
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => toast.info('Reminders feature coming soon!')}
+                onClick={() => toast.info('Fitur pengingat akan segera hadir!')}
                 className="bg-card border-border/50 text-xs h-20 flex-col gap-2 hover:bg-muted/50 transition-all"
               >
                 <Clock className="w-4 h-4 text-muted-foreground" />
-                Reminders
+                Pengingat
               </Button>
             </div>
           </div>

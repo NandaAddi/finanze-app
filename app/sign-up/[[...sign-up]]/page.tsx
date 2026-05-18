@@ -38,7 +38,7 @@ export default function SignUpPage() {
             className="rounded-xl shadow-xl shadow-emerald-500/10 mb-4 border border-emerald-500/20"
           />
           <h1 className="text-2xl font-bold tracking-widest uppercase text-white font-sans">Finanze</h1>
-          <p className="text-white/40 text-sm mt-1.5">Start your journey to financial mastery</p>
+          <p className="text-white/40 text-sm mt-1.5">Mulai perjalanan Anda menuju kebebasan finansial</p>
         </div>
 
         <SignUp 

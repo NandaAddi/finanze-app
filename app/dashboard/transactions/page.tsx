@@ -58,15 +58,15 @@ export default function TransactionsPage() {
         amount: t.amount,
         type: t.type as any,
         description: t.description || '',
-        category_name: (t.category as any)?.name || 'Uncategorized',
+        category_name: (t.category as any)?.name || 'Tanpa Kategori',
         category_id: t.category_id,
-        wallet_name: (t.wallet as any)?.name || 'Unknown Wallet',
+        wallet_name: (t.wallet as any)?.name || 'Dompet Tidak Diketahui',
         wallet_id: t.wallet_id,
         created_at: typeof t.created_at === 'string' ? t.created_at : new Date(t.created_at).toISOString()
       })) || []);
     } catch (err: any) {
       console.error('Error loading transactions:', err);
-      toast.error('Failed to load transactions');
+      toast.error('Gagal memuat transaksi');
     } finally {
       setLoading(false);
     }
@@ -79,9 +79,9 @@ export default function TransactionsPage() {
       if (!result.success) throw new Error(result.error);
       
       setTransactions(prev => prev.filter(t => t.id !== id));
-      toast.success('Transaction deleted');
+      toast.success('Transaksi berhasil dihapus');
     } catch (err: any) {
-      toast.error(err.message || 'Failed to delete transaction');
+      toast.error(err.message || 'Gagal menghapus transaksi');
     }
   };
 
@@ -109,10 +109,10 @@ export default function TransactionsPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           <h1 className="text-4xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
-            <span className="font-semibold text-foreground">Transactions</span>
+            <span className="font-semibold text-foreground">Riwayat Transaksi</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
-            A complete history of your income and expenses.
+            Riwayat lengkap seluruh pemasukan dan pengeluaran Anda.
           </p>
         </div>
         
@@ -120,7 +120,7 @@ export default function TransactionsPage() {
           onClick={() => setIsAddDialogOpen(true)}
           className="h-10 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold gap-2 transition-all hidden md:flex"
         >
-          <Plus className="h-4 w-4" /> Add Transaction
+          <Plus className="h-4 w-4" /> Tambah Transaksi
         </Button>
       </div>
 
@@ -129,7 +129,7 @@ export default function TransactionsPage() {
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input 
-            placeholder="Search..." 
+            placeholder="Cari..." 
             className="pl-8 h-10 bg-card border-border/50 text-sm focus-visible:ring-0 rounded-xl"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,7 +143,7 @@ export default function TransactionsPage() {
               className={`flex-1 h-8 px-4 text-[10px] md:text-[11px] rounded-lg transition-all ${filterType === 'ALL' ? 'bg-muted text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setFilterType('ALL')}
             >
-              All
+              Semua
             </Button>
             <Button 
               variant="ghost" 
@@ -151,7 +151,7 @@ export default function TransactionsPage() {
               className={`flex-1 h-8 px-4 text-[10px] md:text-[11px] rounded-lg transition-all ${filterType === 'INCOME' ? 'bg-emerald-500/10 text-emerald-500' : 'text-muted-foreground'}`}
               onClick={() => setFilterType('INCOME')}
             >
-              Income
+              Pemasukan
             </Button>
             <Button 
               variant="ghost" 
@@ -159,7 +159,7 @@ export default function TransactionsPage() {
               className={`flex-1 h-8 px-4 text-[10px] md:text-[11px] rounded-lg transition-all ${filterType === 'EXPENSE' ? 'bg-rose-500/10 text-rose-500' : 'text-muted-foreground'}`}
               onClick={() => setFilterType('EXPENSE')}
             >
-              Expense
+              Pengeluaran
             </Button>
           </div>
           <Button variant="ghost" size="icon" className="h-10 w-10 border border-border/20 rounded-xl md:hidden">
@@ -182,7 +182,7 @@ export default function TransactionsPage() {
                 {t.type === 'INCOME' ? <ArrowDownLeft className="w-4 h-4 md:w-5 md:h-5" /> : <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />}
               </div>
               <div className="min-w-0">
-                <p className="text-xs md:text-sm font-semibold text-foreground truncate max-w-[120px] md:max-w-none">{t.description || 'Untitled'}</p>
+                <p className="text-xs md:text-sm font-semibold text-foreground truncate max-w-[120px] md:max-w-none">{t.description || 'Tanpa Nama'}</p>
                 <div className="text-[10px] md:text-xs text-muted-foreground flex items-center gap-1.5 md:gap-2">
                   <Badge variant="outline" className="text-[8px] md:text-[9px] h-3.5 md:h-4 font-normal bg-muted border-border/50 uppercase tracking-tighter px-1 md:px-2">{t.category_name}</Badge>
                   <span className="flex items-center gap-1 hidden md:flex"><WalletIcon className="w-2.5 h-2.5" /> {t.wallet_name}</span>
@@ -210,14 +210,14 @@ export default function TransactionsPage() {
                     className="text-xs cursor-pointer"
                     onClick={() => handleEdit(t)}
                   >
-                    Edit Transaction
+                    Edit Transaksi
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-border/20" />
                   <DropdownMenuItem 
                     className="text-xs text-rose-500 focus:bg-rose-500/10 cursor-pointer"
                     onClick={() => handleDelete(t.id)}
                   >
-                    <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete
+                    <Trash2 className="w-3.5 h-3.5 mr-2" /> Hapus
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -228,14 +228,14 @@ export default function TransactionsPage() {
             <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
               <Receipt className="w-8 h-8 text-muted-foreground opacity-30" />
             </div>
-            <h3 className="text-foreground font-medium mb-2">No transactions found</h3>
-            <p className="text-sm text-muted-foreground mb-8">Try adjusting your filters or search query.</p>
+            <h3 className="text-foreground font-medium mb-2">Transaksi tidak ditemukan</h3>
+            <p className="text-sm text-muted-foreground mb-8">Coba sesuaikan filter atau kata kunci pencarian Anda.</p>
             <Button 
               onClick={() => setIsAddDialogOpen(true)}
               variant="outline" 
               className="border-border/30 h-9 rounded-full text-xs"
             >
-              Add First Transaction
+              Tambah Transaksi Pertama
             </Button>
           </div>
         )}

@@ -38,7 +38,7 @@ export default function SignInPage() {
             className="rounded-xl shadow-xl shadow-emerald-500/10 mb-4 border border-emerald-500/20"
           />
           <h1 className="text-2xl font-bold tracking-widest uppercase text-white font-sans">Finanze</h1>
-          <p className="text-white/40 text-sm mt-1.5">Welcome back to your financial cloud</p>
+          <p className="text-white/40 text-sm mt-1.5">Selamat datang kembali di pusat keuangan Anda</p>
         </div>
 
         <SignIn 

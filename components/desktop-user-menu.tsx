@@ -46,7 +46,7 @@ export function DesktopUserMenu() {
             </Avatar>
             <div className="flex flex-col items-start text-left">
               <span className="text-xs font-bold leading-none">{user?.full_name?.split(' ')[0]}</span>
-              <span className="text-[10px] text-muted-foreground mt-1">Premium User</span>
+              <span className="text-[10px] text-muted-foreground mt-1">Pengguna Premium</span>
             </div>
             <ChevronDown className="h-3 w-3 text-muted-foreground" />
           </Button>
