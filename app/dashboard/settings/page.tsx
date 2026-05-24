@@ -80,7 +80,7 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 space-y-12 animate-fade-in pb-20">
       <div>
-        <h1 className="text-4xl font-semibold tracking-tight" style={{ fontFamily: 'var(--font-lora), serif' }}>
+        <h1 className="text-3xl sm:text-[42px] font-semibold tracking-tight" style={{ fontFamily: 'var(--font-lora), serif' }}>
           Pengaturan
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">Kelola preferensi akun dan tampilan aplikasi Anda.</p>

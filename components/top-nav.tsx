@@ -61,7 +61,7 @@ export function TopNav() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-[50] block md:hidden w-full">
-      <div className="h-16 bg-background/80 backdrop-blur-md border-b border-border/10 flex items-center justify-between px-6">
+      <div className="h-16 bg-background/80 backdrop-blur-md border-b border-border/10 flex items-center justify-between px-4 sm:px-6">
         <Link href="/dashboard" className="flex items-center gap-2.5 active:scale-95 transition-transform">
           {mounted ? (
             <Image 

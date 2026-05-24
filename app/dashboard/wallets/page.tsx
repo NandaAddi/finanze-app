@@ -92,7 +92,7 @@ export default function WalletsPage() {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
         <div>
           <h1
-            className="text-4xl sm:text-[42px] tracking-tight"
+            className="text-3xl sm:text-[42px] tracking-tight"
             style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
           >
             <span className="font-semibold text-foreground">Dompet</span>

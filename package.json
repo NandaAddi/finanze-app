@@ -92,5 +92,10 @@
   },
   "overrides": {
     "@types/react": "19.0.8"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.7",
+    "fast-check": "^4.8.0",
+    "vitest": "^4.1.7"
   }
 }

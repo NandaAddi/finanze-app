@@ -24,6 +24,7 @@ import { TransferDialog } from '@/components/transfer-dialog';
 import { useGlobalDialog } from '@/components/global-dialog-provider';
 import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
+import { useMounted } from '@/hooks/use-mounted';
 
 const WeeklyExpenseChart = dynamic(() => import('@/components/charts/weekly-expense-chart'), {
   ssr: false,
@@ -47,16 +48,17 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
   const { openAddDialog, openChatDialog, openScanDialog } = useGlobalDialog();
   const router = useRouter();
+  const mounted = useMounted();
 
-  // Compute greeting at render time — no useEffect or state needed
-  const greeting = (() => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Selamat Pagi';
-    if (hour < 17) return 'Selamat Siang';
-    return 'Selamat Malam';
-  })();
-
-
+  // Compute greeting at render time after mount to avoid hydration mismatch
+  const greeting = mounted
+    ? (() => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Selamat Pagi';
+        if (hour < 17) return 'Selamat Siang';
+        return 'Selamat Malam';
+      })()
+    : 'Selamat';
 
   const totalBalance = initialData.wallets.reduce((acc, w) => acc + w.balance, 0);
 
@@ -67,7 +69,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
           <h1
-            className="text-4xl sm:text-[42px] tracking-tight"
+            className="text-3xl sm:text-[42px] tracking-tight"
             style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}
           >
             <span className="font-semibold text-foreground">{greeting}</span> <span className="text-zinc-400">{user.full_name?.split(' ')[0] || 'User'}</span>
@@ -186,7 +188,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                   <div>
                     <p className="text-sm font-medium text-foreground">{t.description || 'Transaksi Tanpa Nama'}</p>
                     <p className="text-xs text-muted-foreground flex items-center gap-2">
-                      {t.category?.name || 'Tanpa Kategori'} • {format(new Date(t.created_at), 'MMM dd, HH:mm')}
+                      {t.category?.name || 'Tanpa Kategori'}{mounted ? ` • ${format(new Date(t.created_at), 'MMM dd, HH:mm')}` : ''}
                     </p>
                   </div>
                 </div>

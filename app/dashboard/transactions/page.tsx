@@ -108,7 +108,7 @@ export default function TransactionsPage() {
       {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-4xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
+          <h1 className="text-3xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
             <span className="font-semibold text-foreground">Riwayat Transaksi</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-2 max-w-2xl">

@@ -110,7 +110,7 @@ export function BottomNav({ onPlusClick, onChatClick, onScanClick }: BottomNavPr
               key={i}
               href={item.href ?? '/dashboard'}
               className={cn(
-                "flex flex-col items-center justify-center gap-1.5 transition-all px-4 py-3 rounded-2xl min-w-[70px] active:bg-white/5",
+                "flex flex-col items-center justify-center gap-1.5 transition-all px-2 sm:px-4 py-3 rounded-2xl min-w-[60px] sm:min-w-[70px] active:bg-white/5",
                 isActive ? "text-emerald-500" : "text-muted-foreground opacity-40"
               )}
             >

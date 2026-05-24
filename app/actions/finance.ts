@@ -252,8 +252,9 @@ export async function searchFinancials(q: string) {
 export async function seedDefaultCategories(walletId: string) {
   const userId = await getAuth();
   const defaults = [{ name: 'Food', icon: 'utensils', color: '#10b981' }, { name: 'Transport', icon: 'car', color: '#3b82f6' }, { name: 'Others', icon: 'grid', color: '#6b7280' }];
-  await supabaseAdmin.from('categories').insert(defaults.map((c, i) => ({ id: `cat_${Math.random().toString(36).substring(2, 11)}`, ...c, wallet_id: walletId, created_by: userId, position: i })));
-  return { success: true };
+  const { data, error } = await supabaseAdmin.from('categories').insert(defaults.map((c, i) => ({ id: `cat_${Math.random().toString(36).substring(2, 11)}`, ...c, wallet_id: walletId, created_by: userId, position: i }))).select();
+  if (error) throw error;
+  return data;
 }
 
 export async function transferFunds(data: any) {

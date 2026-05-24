@@ -152,7 +152,7 @@ export default function AnalyticsPage() {
       {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-4xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
+          <h1 className="text-3xl sm:text-[42px] tracking-tight" style={{ fontFamily: 'var(--font-lora), Georgia, serif' }}>
             <span className="font-semibold text-foreground">Analitik Keuangan</span>
           </h1>
           <p className="text-[13px] text-muted-foreground mt-2">Analisis mendalam pola pengeluaran dan tren kekayaan Anda.</p>
