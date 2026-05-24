@@ -2,6 +2,7 @@
 
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { auth } from '@clerk/nextjs/server';
+import { requirePremium } from '@/lib/premium-gate';
 
 /**
  * Safely parse JSON that may be wrapped in markdown code fences by the AI.
@@ -36,6 +37,9 @@ function safeParseAIJson(content: string): any {
 
 export async function analyzeReceipt(base64Image: string) {
   try {
+    // 🔒 Premium Gate
+    await requirePremium();
+
     const { userId } = await auth();
     if (!userId) throw new Error('Unauthorized');
 
@@ -133,12 +137,13 @@ export async function analyzeReceipt(base64Image: string) {
 
     return { success: true, data };
   } catch (error: any) {
+    if (error.name === 'PremiumRequiredError') {
+      return { success: false, error: 'PREMIUM_REQUIRED' };
+    }
     console.error('[Receipt Analysis Error]:', error.message);
-    // Return a clean user-facing message, never a raw JS error object
     return {
       success: false,
-      error: error.message || 'Terjadi kesalahan yang tidak terduga. Coba lagi atau pilih foto yang berbeda.'
+      error: error.message || 'Terjadi kesalahan yang tidak terduga.'
     };
   }
 }
-

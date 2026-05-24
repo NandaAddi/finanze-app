@@ -36,34 +36,28 @@ export async function syncUserWithDatabase() {
     const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
     const avatarUrl = user.imageUrl || '';
     
-    const { data: profile, error: fetchError } = await supabaseAdmin
+    // Use UPSERT to avoid 23505 unique constraint violations on race conditions
+    const { data: profile, error } = await supabaseAdmin
       .from('profiles')
-      .select('*')
-      .eq('id', userId)
+      .upsert(
+        { id: userId, email, full_name: fullName, avatar_url: avatarUrl },
+        { onConflict: 'id', ignoreDuplicates: true }
+      )
+      .select()
       .maybeSingle();
       
-    if (fetchError) throw fetchError;
-    
-    if (!profile) {
-      console.log(`[Sync] Creating profile for ${userId}...`);
-      const { data: newProfile, error } = await supabaseAdmin
-        .from('profiles')
-        .insert({ id: userId, email, full_name: fullName, avatar_url: avatarUrl })
-        .select()
-        .single();
-        
-      if (error) {
-        console.error('[Sync Error] Failed to insert profile:', error);
-        throw error;
-      }
-      return newProfile;
+    if (error) {
+      console.error('[Sync Error] Failed to upsert profile:', error);
+      throw error;
     }
+
     return profile;
   } catch (error: any) { 
     console.error('[Sync Critical Error]:', error.message);
     throw error; 
   }
 }
+
 
 export async function getFinancialOverview() {
   try {

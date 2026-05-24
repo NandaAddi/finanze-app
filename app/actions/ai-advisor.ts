@@ -2,6 +2,7 @@
 
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { auth } from '@clerk/nextjs/server';
+import { requirePremium, PremiumRequiredError } from '@/lib/premium-gate';
 
 export async function getQuickInsight() {
   try {
@@ -26,6 +27,9 @@ export async function getQuickInsight() {
 
 export async function generateFinancialInsights() {
   try {
+    // 🔒 Premium Gate: only accessible by premium users
+    await requirePremium();
+
     const { userId } = await auth();
     if (!userId) throw new Error('Unauthorized');
 
@@ -72,6 +76,9 @@ export async function generateFinancialInsights() {
 
     return { success: true, insights: aiResult.choices[0].message.content };
   } catch (error: any) {
+    if (error.name === 'PremiumRequiredError') {
+      return { success: false, error: 'PREMIUM_REQUIRED' };
+    }
     console.error('Advisor generation failed:', error.message);
     return { success: false, error: error.message };
   }

@@ -19,7 +19,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-import { MessageSquare, Send, Loader2, Sparkles, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { MessageSquare, Send, Loader2, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Lock } from 'lucide-react';
 import { parseAndCreateTransactions } from '@/app/actions/ai-chat';
 import { getWallets } from '@/app/actions/finance';
 import { useUser } from '@/components/user-provider';
@@ -84,6 +84,11 @@ export function AIChatDialog({ open, onOpenChange, onSuccess }: {
         }]);
         toast.success(`Berhasil menambahkan ${result.count} transaksi`);
         onSuccess();
+      } else if (result.error === 'PREMIUM_REQUIRED') {
+        setHistory(prev => [...prev, { 
+          role: 'ai', 
+          content: '🔒 PREMIUM_REQUIRED'
+        }]);
       } else {
         throw new Error(result.error || 'Gagal memproses permintaan');
       }
@@ -126,14 +131,32 @@ export function AIChatDialog({ open, onOpenChange, onSuccess }: {
               "flex flex-col max-w-[85%] space-y-2 animate-in fade-in slide-in-from-bottom-2",
               msg.role === 'user' ? "ml-auto items-end" : "mr-auto items-start"
             )}>
-              <div className={cn(
-                "px-4 py-3 rounded-2xl text-sm shadow-lg",
-                msg.role === 'user' 
-                  ? "bg-emerald-600 text-white rounded-tr-none" 
-                  : "bg-muted border border-border/50 rounded-tl-none"
-              )}>
-                {msg.content}
-              </div>
+              {msg.content === '🔒 PREMIUM_REQUIRED' ? (
+                <div className="px-4 py-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 rounded-tl-none max-w-[260px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Lock className="w-4 h-4 text-indigo-400" />
+                    <span className="text-xs font-bold text-indigo-400">Fitur Premium</span>
+                  </div>
+                  <p className="text-[11px] text-[#aaa] mb-3 leading-relaxed">Chat AI hanya untuk pengguna Premium Finanze.</p>
+                  <a
+                    href="https://wa.me/6281234567890?text=Saya+ingin+upgrade+ke+Premium+Finanze"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1 text-[11px] text-indigo-400 font-semibold hover:text-indigo-300"
+                  >
+                    Upgrade ke Premium <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
+              ) : (
+                <div className={cn(
+                  "px-4 py-3 rounded-2xl text-sm shadow-lg",
+                  msg.role === 'user' 
+                    ? "bg-emerald-600 text-white rounded-tr-none" 
+                    : "bg-muted border border-border/50 rounded-tl-none"
+                )}>
+                  {msg.content}
+                </div>
+              )}
               
               {msg.data && (
                 <div className="w-full space-y-2 mt-2">

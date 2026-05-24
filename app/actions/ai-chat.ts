@@ -3,9 +3,13 @@
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { auth } from '@clerk/nextjs/server';
 import { createTransaction } from './finance';
+import { requirePremium } from '@/lib/premium-gate';
 
 export async function parseAndCreateTransactions(text: string, walletId: string) {
   try {
+    // 🔒 Premium Gate
+    await requirePremium();
+
     const { userId } = await auth();
     if (!userId) throw new Error('Unauthorized');
 
@@ -89,9 +93,12 @@ export async function parseAndCreateTransactions(text: string, walletId: string)
       }
     }
 
-    return { success: true, count: parsedData.length };
+    return { success: true, count: parsedData.length, data: parsedData };
   } catch (error: any) {
+    if (error.name === 'PremiumRequiredError') {
+      return { success: false, error: 'PREMIUM_REQUIRED', count: 0 };
+    }
     console.error('[AI-Audit] Gagal Total:', error.message);
-    return { success: false, error: error.message };
+    return { success: false, error: error.message, count: 0 };
   }
 }

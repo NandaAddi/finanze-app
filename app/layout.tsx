@@ -30,11 +30,11 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: 'Finanze — Track Money Effortlessly',
   description: 'Minimalist Personal Finance Management for Individuals. Track your money effortlessly with AI-powered insights.',
-  metadataBase: new URL('https://finanze.com'), // Assuming a placeholder or final domain
+  metadataBase: new URL('https://finanze.web.id'),
   openGraph: {
     title: 'Finanze — Track Money Effortlessly',
     description: 'Minimalist Personal Finance Management for Individuals. Track your money effortlessly with AI-powered insights.',
-    url: 'https://finanze.com',
+    url: 'https://finanze.web.id',
     siteName: 'Finanze',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'en_US',
