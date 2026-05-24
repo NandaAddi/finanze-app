@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     description: 'Minimalist Personal Finance Management for Individuals. Track your money effortlessly with AI-powered insights.',
     url: 'https://finanze.web.id',
     siteName: 'Finanze',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://finanze.web.id/og-image.png', width: 1200, height: 630 }],
     locale: 'en_US',
     type: 'website',
   },
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Finanze — Track Money Effortlessly',
     description: 'Minimalist Personal Finance Management for Individuals. Track your money effortlessly with AI-powered insights.',
-    images: ['/og-image.png'],
+    images: ['https://finanze.web.id/og-image.png'],
   },
   robots: {
     index: true,
