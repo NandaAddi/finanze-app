@@ -11,6 +11,8 @@ import {
 import { UserButton } from '@clerk/nextjs';
 import { ClientOnly } from '@/components/client-only';
 
+export const dynamic = 'force-dynamic';
+
 const adminNavItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/blog', label: 'Blog CMS', icon: FileText },

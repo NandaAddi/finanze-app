@@ -2,6 +2,8 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getAllUsersWithTier } from '@/app/actions/admin';
 import { UsersCmsClient } from '@/components/admin/users-cms-client';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminUsersPage() {
   await requireAdmin();
   const users = await getAllUsersWithTier();

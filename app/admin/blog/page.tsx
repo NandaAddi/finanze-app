@@ -3,6 +3,8 @@ import { getAllBlogPosts } from '@/app/actions/admin';
 import Link from 'next/link';
 import { BlogCmsClient } from '@/components/admin/blog-cms-client';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminBlogPage() {
   await requireAdmin();
   const posts = await getAllBlogPosts();
