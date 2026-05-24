@@ -1,30 +1,22 @@
 import { redirect } from 'next/navigation';
-import { auth, currentUser } from '@clerk/nextjs/server';
+import { getAuthCached, getProfileCached } from '@/lib/cached-queries';
 import { getFinancialOverview } from '@/app/actions/finance';
 import { getQuickInsight } from '@/app/actions/ai-advisor';
 import { DashboardClient } from '@/components/dashboard-client';
-import { supabaseAdmin } from '@/utils/supabase/admin';
 
 export default async function DashboardPage() {
-  const { userId } = await auth();
-  const user = await currentUser();
+  const userId = await getAuthCached();
 
-  if (!userId || !user) {
+  if (!userId) {
     return redirect('/sign-in');
   }
 
-  // Fetch data on the server (Rule: server-side-performance)
-  const [initialData, quickInsight] = await Promise.all([
+  // Fetch data in parallel on the server (Rule: server-side-performance)
+  const [initialData, quickInsight, profile] = await Promise.all([
     getFinancialOverview(),
-    getQuickInsight()
+    getQuickInsight(),
+    getProfileCached(userId)
   ]);
-
-  // Get profile data from our DB using Supabase Admin
-  const { data: profile } = await supabaseAdmin
-    .from('profiles')
-    .select('full_name')
-    .eq('id', userId)
-    .single();
 
   return (
     <DashboardClient 
@@ -32,7 +24,7 @@ export default async function DashboardPage() {
       quickInsight={quickInsight}
       user={{
         id: userId,
-        full_name: profile?.full_name || user.firstName || 'User'
+        full_name: profile?.full_name || 'Pengguna Finanze'
       }} 
     />
   );

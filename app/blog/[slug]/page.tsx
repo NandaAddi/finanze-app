@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { BlogPost } from '@/lib/types/admin';
 import { ChevronLeft, Calendar, Clock, BookOpen, Share2, ArrowRight } from 'lucide-react';
+import { cache } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,15 +12,16 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+// React cache memoizes database results per-request lifecycle to prevent duplicate database queries
+const getPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   const { data } = await supabaseAdmin
     .from('blog_posts')
-    .select('*')
+    .select('id, slug, title, content, excerpt, meta_description, category, read_time, published_at, author, updated_at')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
   return data ?? null;
-}
+});
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
