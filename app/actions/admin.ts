@@ -173,7 +173,7 @@ export async function getAllUsersWithTier() {
 
   const { data, error } = await supabaseAdmin
     .from('profiles')
-    .select('id, full_name, email, tier, premium_until, created_at')
+    .select('id, full_name, email, tier, premium_until, role, created_at')
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(error.message);
@@ -208,6 +208,33 @@ export async function toggleUserTier(
   } catch (clerkError: any) {
     console.warn('[Admin] Failed to sync tier to Clerk metadata:', clerkError.message);
     // Non-fatal — Supabase is the source of truth, Clerk sync is best-effort
+  }
+
+  revalidatePath('/admin/users');
+}
+
+export async function toggleUserRole(
+  targetUserId: string,
+  targetRole: 'member' | 'admin'
+) {
+  await requireAdmin();
+
+  // 1. Update Supabase
+  const { error } = await supabaseAdmin
+    .from('profiles')
+    .update({ role: targetRole })
+    .eq('id', targetUserId);
+
+  if (error) throw new Error(error.message);
+
+  // 2. Sync to Clerk publicMetadata
+  try {
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(targetUserId, {
+      publicMetadata: { role: targetRole },
+    });
+  } catch (clerkError: any) {
+    console.warn('[Admin] Failed to sync role to Clerk metadata:', clerkError.message);
   }
 
   revalidatePath('/admin/users');

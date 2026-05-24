@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { toggleUserTier } from '@/app/actions/admin';
+import { toggleUserTier, toggleUserRole } from '@/app/actions/admin';
 import { 
   Crown, User, Calendar, Sparkles, 
-  ArrowUpCircle, ArrowDownCircle, Loader2, ShieldCheck
+  ArrowUpCircle, ArrowDownCircle, Loader2, ShieldCheck, ShieldAlert
 } from 'lucide-react';
 
 interface UserRow {
@@ -13,6 +13,7 @@ interface UserRow {
   email: string;
   tier: string;
   premium_until: string | null;
+  role: string;
   created_at: string;
 }
 
@@ -29,6 +30,7 @@ function formatDate(iso: string) {
 export function UsersCmsClient({ users }: Props) {
   const [isPending, startTransition] = useTransition();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [loadingRoleId, setLoadingRoleId] = useState<string | null>(null);
 
   const handleToggle = (userId: string, currentTier: string) => {
     const targetTier = currentTier === 'premium' ? 'free' : 'premium';
@@ -36,6 +38,15 @@ export function UsersCmsClient({ users }: Props) {
     startTransition(async () => {
       await toggleUserTier(userId, targetTier);
       setLoadingId(null);
+    });
+  };
+
+  const handleRoleToggle = (userId: string, currentRole: string) => {
+    const targetRole = currentRole === 'admin' ? 'member' : 'admin';
+    setLoadingRoleId(userId);
+    startTransition(async () => {
+      await toggleUserRole(userId, targetRole);
+      setLoadingRoleId(null);
     });
   };
 
@@ -96,6 +107,13 @@ export function UsersCmsClient({ users }: Props) {
                       <ShieldCheck className="w-2.5 h-2.5" /> Free
                     </span>
                   )}
+
+                  {/* Role Badge */}
+                  {user.role === 'admin' && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-[9px] font-bold text-amber-400 tracking-widest uppercase">
+                      Admin
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-[11px] text-[#555] truncate">{user.email}</p>
@@ -114,27 +132,52 @@ export function UsersCmsClient({ users }: Props) {
                 </div>
               </div>
 
-              {/* Action Button */}
-              <button
-                onClick={() => handleToggle(user.id, user.tier)}
-                disabled={isPending && loadingId === user.id}
-                title={effectivePremium ? 'Turunkan ke Free' : 'Jadikan Premium'}
-                className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-150 border
-                  ${effectivePremium
-                    ? 'bg-rose-500/5 text-rose-400 border-rose-500/15 hover:bg-rose-500/10 hover:border-rose-500/25'
-                    : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/15 hover:border-indigo-500/30'
-                  }
-                `}
-              >
-                {loadingId === user.id ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                ) : effectivePremium ? (
-                  <ArrowDownCircle className="w-3.5 h-3.5" />
-                ) : (
-                  <ArrowUpCircle className="w-3.5 h-3.5" />
-                )}
-                {effectivePremium ? 'Turunkan ke Free' : 'Jadikan Premium'}
-              </button>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2">
+                {/* 1. Tier Toggle Button */}
+                <button
+                  onClick={() => handleToggle(user.id, user.tier)}
+                  disabled={(isPending && loadingId === user.id) || (isPending && loadingRoleId === user.id)}
+                  title={effectivePremium ? 'Turunkan ke Free' : 'Jadikan Premium'}
+                  className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-150 border
+                    ${effectivePremium
+                      ? 'bg-rose-500/5 text-rose-400 border-rose-500/15 hover:bg-rose-500/10 hover:border-rose-500/25'
+                      : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/15 hover:border-indigo-500/30'
+                    }
+                  `}
+                >
+                  {loadingId === user.id ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : effectivePremium ? (
+                    <ArrowDownCircle className="w-3.5 h-3.5" />
+                  ) : (
+                    <ArrowUpCircle className="w-3.5 h-3.5" />
+                  )}
+                  {effectivePremium ? 'Turunkan ke Free' : 'Jadikan Premium'}
+                </button>
+
+                {/* 2. Role Toggle Button */}
+                <button
+                  onClick={() => handleRoleToggle(user.id, user.role)}
+                  disabled={(isPending && loadingId === user.id) || (isPending && loadingRoleId === user.id)}
+                  title={user.role === 'admin' ? 'Jadikan Member Biasa' : 'Jadikan Admin'}
+                  className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-150 border
+                    ${user.role === 'admin'
+                      ? 'bg-amber-500/5 text-amber-400 border-amber-500/15 hover:bg-amber-500/10 hover:border-amber-500/25'
+                      : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/15 hover:border-emerald-500/30'
+                    }
+                  `}
+                >
+                  {loadingRoleId === user.id ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : user.role === 'admin' ? (
+                    <ArrowDownCircle className="w-3.5 h-3.5" />
+                  ) : (
+                    <ArrowUpCircle className="w-3.5 h-3.5" />
+                  )}
+                  {user.role === 'admin' ? 'Turunkan ke Member' : 'Jadikan Admin'}
+                </button>
+              </div>
             </div>
           </div>
         );
