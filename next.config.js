@@ -1,6 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: { unoptimized: true },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

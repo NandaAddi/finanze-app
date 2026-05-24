@@ -6,11 +6,19 @@
  * doubling memory usage. Now they live here once, and any component can trigger
  * them via the `useGlobalDialog()` hook.
  */
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, lazy, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
-import { AddTransactionDialog } from '@/components/add-transaction-dialog';
-import { AIChatDialog } from '@/components/ai-chat-dialog';
-import { ReceiptScannerDialog } from '@/components/receipt-scanner-dialog';
+
+// Lazy-loaded heavy components for code-splitting and faster initial bundle load
+const AddTransactionDialog = lazy(() => 
+  import('@/components/add-transaction-dialog').then(module => ({ default: module.AddTransactionDialog }))
+);
+const AIChatDialog = lazy(() => 
+  import('@/components/ai-chat-dialog').then(module => ({ default: module.AIChatDialog }))
+);
+const ReceiptScannerDialog = lazy(() => 
+  import('@/components/receipt-scanner-dialog').then(module => ({ default: module.ReceiptScannerDialog }))
+);
 
 interface GlobalDialogContextType {
   openAddDialog: () => void;
@@ -42,22 +50,30 @@ export function GlobalDialogProvider({ children }: { children: React.ReactNode }
     <GlobalDialogContext.Provider value={{ openAddDialog, openChatDialog, openScanDialog }}>
       {children}
 
-      {/* These three dialogs are mounted ONCE for the entire dashboard */}
-      <AddTransactionDialog
-        open={isAddOpen}
-        onOpenChange={setIsAddOpen}
-        onSuccess={onSuccess}
-      />
-      <AIChatDialog
-        open={isChatOpen}
-        onOpenChange={setIsChatOpen}
-        onSuccess={onSuccess}
-      />
-      <ReceiptScannerDialog
-        open={isScanOpen}
-        onOpenChange={setIsScanOpen}
-        onSuccess={onSuccess}
-      />
+      {/* These dialogs are dynamically loaded and mounted only when opened to keep initial JS tiny */}
+      <Suspense fallback={null}>
+        {isAddOpen && (
+          <AddTransactionDialog
+            open={isAddOpen}
+            onOpenChange={setIsAddOpen}
+            onSuccess={onSuccess}
+          />
+        )}
+        {isChatOpen && (
+          <AIChatDialog
+            open={isChatOpen}
+            onOpenChange={setIsChatOpen}
+            onSuccess={onSuccess}
+          />
+        )}
+        {isScanOpen && (
+          <ReceiptScannerDialog
+            open={isScanOpen}
+            onOpenChange={setIsScanOpen}
+            onSuccess={onSuccess}
+          />
+        )}
+      </Suspense>
     </GlobalDialogContext.Provider>
   );
 }
