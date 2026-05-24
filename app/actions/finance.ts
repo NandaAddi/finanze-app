@@ -36,6 +36,21 @@ export async function syncUserWithDatabase() {
     const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
     const avatarUrl = user.imageUrl || '';
     
+    // Clear email unique constraint conflicts (occurs when dev/prod Clerk environments share the same Supabase database)
+    const { data: existingEmailUser } = await supabaseAdmin
+      .from('profiles')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (existingEmailUser && existingEmailUser.id !== userId) {
+      console.warn(`[Sync] Email conflict detected: ${email} is registered under ID ${existingEmailUser.id}. Renaming old profile to clear constraint.`);
+      await supabaseAdmin
+        .from('profiles')
+        .update({ email: `${email}_old_${Date.now()}` })
+        .eq('id', existingEmailUser.id);
+    }
+    
     // Use UPSERT to avoid 23505 unique constraint violations on race conditions
     const { data: profile, error } = await supabaseAdmin
       .from('profiles')
