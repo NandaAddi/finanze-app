@@ -23,6 +23,7 @@ import { analyzeReceipt } from '@/app/actions/receipt';
 import { getFinancialOverview, createTransaction, getCategories } from '@/app/actions/finance';
 import { useUser } from '@/components/user-provider';
 import { toast } from 'sonner';
+import { PremiumPaywall } from '@/components/premium-paywall';
 
 export function ReceiptScannerDialog({ open, onOpenChange, onSuccess }: { 
   open: boolean; 
@@ -120,13 +121,21 @@ export function ReceiptScannerDialog({ open, onOpenChange, onSuccess }: {
     setReviewTransactions([]);
   };
 
+  const isPremium = user?.tier === 'premium';
+
   return (
     <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if(!o) resetScanner(); }}>
       <DialogContent className="sm:max-w-[450px] w-full h-[100dvh] sm:h-auto max-w-none sm:rounded-3xl rounded-none bg-card p-0 overflow-hidden flex flex-col border-none shadow-2xl">
-        <DialogHeader className="p-8 pb-4">
-          <DialogTitle className="text-2xl font-bold font-serif-display text-center">Receipt Scanner</DialogTitle>
-          <p className="text-center text-xs text-muted-foreground">Pilih cara untuk memasukkan struk belanja Anda</p>
-        </DialogHeader>
+        {!isPremium ? (
+          <div className="p-6">
+            <PremiumPaywall featureName="Scan Struk" />
+          </div>
+        ) : (
+          <>
+            <DialogHeader className="p-8 pb-4">
+              <DialogTitle className="text-2xl font-bold font-serif-display text-center">Receipt Scanner</DialogTitle>
+              <p className="text-center text-xs text-muted-foreground">Pilih cara untuk memasukkan struk belanja Anda</p>
+            </DialogHeader>
 
         <div className="flex-1 p-8 overflow-y-auto">
           {step === 'upload' && (
@@ -277,6 +286,8 @@ export function ReceiptScannerDialog({ open, onOpenChange, onSuccess }: {
              <Button variant="ghost" onClick={() => onOpenChange(false)} className="w-full text-muted-foreground text-xs h-10 hover:bg-transparent">Batalkan</Button>
           )}
         </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

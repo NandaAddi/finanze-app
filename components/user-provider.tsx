@@ -11,6 +11,8 @@ interface User {
   full_name?: string;
   avatar_url?: string;
   banner_url?: string;
+  tier?: 'free' | 'premium';
+  premium_until?: string | null;
 }
 
 interface UserContextType {

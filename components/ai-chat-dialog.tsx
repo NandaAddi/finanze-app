@@ -25,6 +25,7 @@ import { getWallets } from '@/app/actions/finance';
 import { useUser } from '@/components/user-provider';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { PremiumPaywall } from '@/components/premium-paywall';
 
 export function AIChatDialog({ open, onOpenChange, onSuccess }: { 
   open: boolean; 
@@ -100,18 +101,26 @@ export function AIChatDialog({ open, onOpenChange, onSuccess }: {
     }
   };
 
+  const isPremium = user?.tier === 'premium';
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] w-full h-[100dvh] sm:h-[600px] max-w-none sm:rounded-2xl rounded-none bg-card border-border/50 p-0 overflow-hidden flex flex-col">
-        <DialogHeader className="p-6 bg-muted/30 border-b border-border/50">
-          <DialogTitle className="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            <Sparkles className="w-5 h-5 text-emerald-400" />
-            Finanze AI Chat
-          </DialogTitle>
-          <DialogDescription className="text-xs text-muted-foreground">
-            Tulis transaksi Anda secara natural. Contoh: "makan bakso 15rb"
-          </DialogDescription>
-        </DialogHeader>
+        {!isPremium ? (
+          <div className="p-6">
+            <PremiumPaywall featureName="Chat AI" />
+          </div>
+        ) : (
+          <>
+            <DialogHeader className="p-6 bg-muted/30 border-b border-border/50">
+              <DialogTitle className="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                <Sparkles className="w-5 h-5 text-emerald-400" />
+                Finanze AI Chat
+              </DialogTitle>
+              <DialogDescription className="text-xs text-muted-foreground">
+                Tulis transaksi Anda secara natural. Contoh: "makan bakso 15rb"
+              </DialogDescription>
+            </DialogHeader>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-grid-slate-200/50 dark:bg-grid-white/[0.02]">
           {history.length === 0 && (
@@ -219,6 +228,8 @@ export function AIChatDialog({ open, onOpenChange, onSuccess }: {
             </Button>
           </form>
         </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
