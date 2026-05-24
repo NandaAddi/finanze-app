@@ -97,5 +97,12 @@
     "@vitest/coverage-v8": "^4.1.7",
     "fast-check": "^4.8.0",
     "vitest": "^4.1.7"
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "ios_saf >= 12",
+    "safari >= 12"
+  ]
 }
