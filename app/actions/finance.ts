@@ -56,7 +56,7 @@ export async function syncUserWithDatabase() {
       .from('profiles')
       .upsert(
         { id: userId, email, full_name: fullName, avatar_url: avatarUrl },
-        { onConflict: 'id', ignoreDuplicates: true }
+        { onConflict: 'id', ignoreDuplicates: false }
       )
       .select()
       .maybeSingle();
