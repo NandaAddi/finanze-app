@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/dashboard/', '/api/', '/_next/'],
+      disallow: ['/dashboard/', '/admin/', '/api/', '/_next/'],
     },
     sitemap: 'https://finanze.web.id/sitemap.xml',
   };

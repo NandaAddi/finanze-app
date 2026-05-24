@@ -28,17 +28,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   if (!post) return { title: 'Artikel Tidak Ditemukan — Finanze' };
 
+  const url = `https://finanze.web.id/blog/${post.slug}`;
+
   return {
     title: `${post.title} — Blog Finanze`,
     description: post.meta_description,
     keywords: [post.category.toLowerCase(), 'pengatur keuangan', 'tips menabung', 'finanze blog'],
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: post.title,
       description: post.meta_description,
-      url: `https://finanze.web.id/blog/${post.slug}`,
+      url,
       type: 'article',
       publishedTime: post.published_at,
+      modifiedTime: post.updated_at || post.published_at,
       authors: [post.author],
+      images: [
+        {
+          url: 'https://finanze.web.id/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.meta_description,
+      images: ['https://finanze.web.id/og-image.png'],
     },
   };
 }
@@ -62,6 +82,7 @@ export default async function BlogPostPage({ params }: Props) {
             "headline": post.title,
             "description": post.meta_description,
             "datePublished": post.published_at,
+            "dateModified": post.updated_at || post.published_at,
             "author": { "@type": "Person", "name": post.author },
             "publisher": {
               "@type": "Organization",
