@@ -6,6 +6,7 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -128,6 +129,10 @@ export function ReceiptScannerDialog({ open, onOpenChange, onSuccess }: {
       <DialogContent className="sm:max-w-[450px] w-full h-[100dvh] sm:h-auto max-w-none sm:rounded-3xl rounded-none bg-card p-0 overflow-hidden flex flex-col border-none shadow-2xl">
         {!isPremium ? (
           <div className="p-6">
+            <DialogHeader className="sr-only">
+              <DialogTitle>Receipt Scanner - Premium Gated</DialogTitle>
+              <DialogDescription>Fitur Scan Struk hanya tersedia untuk pengguna Premium Finanze.</DialogDescription>
+            </DialogHeader>
             <PremiumPaywall featureName="Scan Struk" />
           </div>
         ) : (

@@ -108,6 +108,10 @@ export function AIChatDialog({ open, onOpenChange, onSuccess }: {
       <DialogContent className="sm:max-w-[500px] w-full h-[100dvh] sm:h-[600px] max-w-none sm:rounded-2xl rounded-none bg-card border-border/50 p-0 overflow-hidden flex flex-col">
         {!isPremium ? (
           <div className="p-6">
+            <DialogHeader className="sr-only">
+              <DialogTitle>Finanze AI Chat - Premium Gated</DialogTitle>
+              <DialogDescription>Fitur Chat AI hanya tersedia untuk pengguna Premium Finanze.</DialogDescription>
+            </DialogHeader>
             <PremiumPaywall featureName="Chat AI" />
           </div>
         ) : (
