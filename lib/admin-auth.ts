@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
-import { clerkClient } from '@clerk/nextjs/server';
+import { supabaseAdmin } from '@/utils/supabase/admin';
 import { redirect } from 'next/navigation';
 
 /**
@@ -14,15 +14,17 @@ export async function requireAdmin() {
     redirect('/sign-in');
   }
 
-  // Read publicMetadata directly — bypasses JWT token caching
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId!);
-  const role = user.publicMetadata?.role as string | undefined;
+  // Bypas JWT caching dengan membaca role langsung dari database Supabase (Source of Truth)
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .maybeSingle();
 
-  if (role !== 'admin') {
+  if (!profile || profile.role !== 'admin') {
     redirect('/dashboard');
   }
 
-  return { userId: userId!, user };
+  return { userId: userId!, profile };
 }
 
