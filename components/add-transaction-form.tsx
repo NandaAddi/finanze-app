@@ -18,7 +18,7 @@ import { Loader2, Plus, Receipt, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-export function AddTransactionForm() {
+export function AddTransactionForm({ transactionToEdit }: { transactionToEdit?: any } = {}) {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
