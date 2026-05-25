@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, BrainCircuit, TrendingDown, Target, RefreshCw, Loader2 } from 'lucide-react';
+import { BrainCircuit, TrendingDown, Target, RefreshCw, Loader2 } from 'lucide-react';
 import { generateFinancialInsights } from '@/app/actions/ai-advisor';
 import ReactMarkdown from 'react-markdown';
 
@@ -31,7 +31,7 @@ export function AIAdvisorClient() {
     <div className="max-w-4xl mx-auto animate-fade-in pb-20">
       <div className="flex flex-col items-center text-center mb-8 md:mb-12">
         <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-4 md:mb-6 border border-emerald-500/20">
-          <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" />
+          <BrainCircuit className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-3 md:mb-4" style={{ fontFamily: 'var(--font-lora), serif' }}>
           Penasihat Keuangan AI

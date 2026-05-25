@@ -16,12 +16,12 @@ import {
   Receipt,
   PiggyBank,
   MoreHorizontal,
-  Sparkles,
+  Bot,
+  BrainCircuit,
   Camera
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { TransferDialog } from '@/components/transfer-dialog';
-import { useGlobalDialog } from '@/components/global-dialog-provider';
 import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
 import { useMounted } from '@/hooks/use-mounted';
@@ -46,7 +46,6 @@ interface DashboardClientProps {
 
 export function DashboardClient({ initialData, quickInsight, user }: DashboardClientProps) {
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
-  const { openAddDialog, openChatDialog, openScanDialog } = useGlobalDialog();
   const router = useRouter();
   const mounted = useMounted();
 
@@ -79,17 +78,17 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
           </p>
         </div>
         
-        <div className="flex items-center gap-3 md:flex hidden">
+        <div className="hidden md:flex items-center gap-3">
            <Button 
-             onClick={openChatDialog}
+             onClick={() => router.push('/dashboard/chat')}
              variant="outline"
              aria-label="Chat AI Advisor"
              className="bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20 text-xs gap-2 h-10 px-5 rounded-full transition-all text-emerald-500"
            >
-             <Sparkles className="w-4 h-4" /> Chat AI
+             <Bot className="w-4 h-4" /> Chat AI
            </Button>
            <Button 
-             onClick={openScanDialog}
+             onClick={() => router.push('/dashboard/scan')}
              variant="outline"
              aria-label="Scan Struk Belanja"
              className="bg-white/5 border-white/10 hover:bg-white/10 text-xs gap-2 h-10 px-5 rounded-full transition-all"
@@ -97,7 +96,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
              <Camera className="w-4 h-4" /> Scan Struk
            </Button>
            <Button 
-             onClick={openAddDialog}
+             onClick={() => router.push('/dashboard/transactions/add')}
              aria-label="Tambah Transaksi"
              className="bg-emerald-700 hover:bg-emerald-800 text-white gap-2 h-10 px-5 rounded-full transition-all"
            >
@@ -212,7 +211,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
                   <Receipt className="w-6 h-6 text-muted-foreground/40" />
                 </div>
                 <p className="text-sm text-muted-foreground">Tidak ada transaksi</p>
-                <Button onClick={openAddDialog} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Tambah transaksi pertama Anda</Button>
+                <Button onClick={() => router.push('/dashboard/transactions/add')} variant="outline" size="sm" className="mt-4 border-border/20 text-xs h-8">Tambah transaksi pertama Anda</Button>
               </div>
             )}
           </div>
@@ -224,7 +223,7 @@ export function DashboardClient({ initialData, quickInsight, user }: DashboardCl
           <Card className="bg-card border-border/50 shadow-none border-l-emerald-500/50 border-l-2">
             <CardContent className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-4 h-4 text-emerald-500" />
+                <BrainCircuit className="w-4 h-4 text-emerald-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500/80">AI Insight</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed italic">

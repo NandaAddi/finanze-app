@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type AccentTheme = "emerald" | "pink" | "blue" | "violet" | "orange";
+type AccentTheme = "emerald" | "pink" | "blue" | "violet" | "orange" | "rose";
 
 interface ThemeContextValue {
   accent: AccentTheme;
@@ -24,7 +24,7 @@ export function AccentThemeProvider({ children }: { children: React.ReactNode })
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem("accent-theme") as AccentTheme | null;
-    const validThemes: AccentTheme[] = ["emerald", "pink", "blue", "violet", "orange"];
+    const validThemes: AccentTheme[] = ["emerald", "pink", "blue", "violet", "orange", "rose"];
     if (saved && validThemes.includes(saved)) {
       setAccentState(saved);
       applyTheme(saved);
@@ -47,10 +47,9 @@ export function AccentThemeProvider({ children }: { children: React.ReactNode })
 function applyTheme(t: AccentTheme) {
   const html = document.documentElement;
   // Remove all theme classes
-  html.classList.remove("theme-pink", "theme-blue", "theme-violet", "theme-orange");
+  html.classList.remove("theme-pink", "theme-blue", "theme-violet", "theme-orange", "theme-rose");
   // Apply the selected theme (emerald is default)
   if (t !== "emerald") {
     html.classList.add(`theme-${t}`);
   }
 }
-

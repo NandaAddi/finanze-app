@@ -19,6 +19,8 @@ import { useMounted } from "@/hooks/use-mounted";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { useAccentTheme } from "@/components/accent-theme-provider";
+import { cn } from "@/lib/utils";
 
 const settingsSchema = z.object({
   full_name: z.string().max(100, "Nama tidak boleh lebih dari 100 karakter").optional(),
@@ -32,6 +34,16 @@ export default function SettingsPage() {
   const { user, refreshUser } = useUser();
   const [saving, setSaving] = useState(false);
   const mounted = useMounted();
+  const { accent, setAccent } = useAccentTheme();
+
+  const accentThemes = [
+    { key: 'emerald' as const, label: 'Emerald', color: 'bg-emerald-500', ring: 'ring-emerald-500/40' },
+    { key: 'rose' as const, label: 'Rose Gold', color: 'bg-[hsl(343,65%,58%)]', ring: 'ring-[hsl(343,65%,58%)]/40' },
+    { key: 'pink' as const, label: 'Blossom', color: 'bg-pink-500', ring: 'ring-pink-500/40' },
+    { key: 'blue' as const, label: 'Ocean', color: 'bg-blue-500', ring: 'ring-blue-500/40' },
+    { key: 'violet' as const, label: 'Violet', color: 'bg-violet-500', ring: 'ring-violet-500/40' },
+    { key: 'orange' as const, label: 'Sunset', color: 'bg-orange-500', ring: 'ring-orange-500/40' },
+  ];
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsSchema),
@@ -153,6 +165,7 @@ export default function SettingsPage() {
             </div>
             
             <div className="p-8 border border-border/50 rounded-3xl bg-card space-y-8 shadow-sm">
+              {/* Dark Mode Toggle */}
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <label className="text-sm font-medium">Mode Gelap</label>
@@ -169,6 +182,49 @@ export default function SettingsPage() {
                     <div className="w-11 h-6 bg-muted animate-pulse rounded-full" />
                   )}
                   <span className="text-[10px] text-emerald-500 uppercase tracking-widest font-bold">Nyala</span>
+                </div>
+              </div>
+
+              <Separator className="bg-border/10" />
+
+              {/* Accent Color Customizer */}
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Warna Aksen</label>
+                  <p className="text-xs text-muted-foreground">Pilih warna tema yang sesuai dengan kepribadian Anda.</p>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                  {accentThemes.map((t) => {
+                    const isActive = accent === t.key;
+                    return (
+                      <button
+                        key={t.key}
+                        onClick={() => setAccent(t.key)}
+                        className={cn(
+                          "flex flex-col items-center gap-2.5 p-3 rounded-2xl border transition-all duration-300 group",
+                          isActive
+                            ? "border-primary/30 bg-primary/5 shadow-sm"
+                            : "border-transparent hover:border-border/50 hover:bg-muted/30"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center",
+                          t.color,
+                          isActive ? `ring-4 ${t.ring} scale-110` : "group-hover:scale-105"
+                        )}>
+                          {isActive && (
+                            <Check className="w-4 h-4 text-white drop-shadow-md" />
+                          )}
+                        </div>
+                        <span className={cn(
+                          "text-[10px] font-bold tracking-tight transition-colors",
+                          isActive ? "text-foreground" : "text-muted-foreground"
+                        )}>
+                          {t.label}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

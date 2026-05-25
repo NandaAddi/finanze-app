@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { toggleUserTier, toggleUserRole } from '@/app/actions/admin';
 import { 
-  Crown, User, Calendar, Sparkles, 
+  Crown, User, Calendar, 
   ArrowUpCircle, ArrowDownCircle, Loader2, ShieldCheck, ShieldAlert
 } from 'lucide-react';
 
@@ -125,7 +125,7 @@ export function UsersCmsClient({ users }: Props) {
                   </span>
                   {isPremium && user.premium_until && (
                     <span className={`flex items-center gap-1 ${isExpired ? 'text-rose-400/60' : 'text-indigo-400/60'}`}>
-                      <Sparkles className="w-3 h-3" />
+                      <Crown className="w-3 h-3" />
                       {isExpired ? 'Kadaluarsa' : 'Premium s/d'} {formatDate(user.premium_until)}
                     </span>
                   )}

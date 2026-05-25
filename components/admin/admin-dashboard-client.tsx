@@ -2,7 +2,7 @@
 
 import { AdminStats, RecentUser, UserGrowthPoint } from '@/lib/types/admin';
 import {
-  Users, Receipt, Sparkles, TrendingUp,
+  Users, Receipt, Bot, TrendingUp,
   Calendar, ArrowUpRight
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -44,7 +44,7 @@ const statCards = (stats: AdminStats) => [
   {
     label: 'AI Queries',
     value: stats.totalAiQueries.toLocaleString('id-ID'),
-    icon: Sparkles,
+    icon: Bot,
     color: 'text-purple-400',
     bg: 'bg-purple-500/10',
     border: 'border-purple-500/10',

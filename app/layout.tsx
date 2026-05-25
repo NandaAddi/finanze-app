@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { UserProvider } from '@/components/user-provider';
 import { AccentThemeProvider } from '@/components/accent-theme-provider';
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { TransitionProvider } from '@/components/transition-provider';
 import { Suspense } from 'react';
 import { CookieConsent } from '@/components/cookie-consent';
@@ -90,7 +91,12 @@ export default function RootLayout({
       >
         <body className={`${GeistSans.className} antialiased`}>
           <Polyfill />
-          {process.env.VERCEL === '1' && <Analytics />}
+          {process.env.VERCEL === '1' && (
+            <>
+              <Analytics />
+              <SpeedInsights />
+            </>
+          )}
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AccentThemeProvider>
               <UserProvider>

@@ -158,6 +158,20 @@
     --accent: 24 40% 18%;
     --accent-foreground: 24 95% 85%;
   }
+
+  /* === ROSE GOLD THEME (Sakura Blossom) === */
+  .theme-rose {
+    --primary: 343 65% 58%;
+    --ring: 343 65% 58%;
+    --accent: 343 55% 95%;
+    --accent-foreground: 343 70% 32%;
+  }
+  .dark.theme-rose {
+    --primary: 343 75% 72%;
+    --ring: 343 75% 72%;
+    --accent: 343 45% 14%;
+    --accent-foreground: 343 80% 88%;
+  }
 }
 
 @layer base {
@@ -375,4 +389,12 @@
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: hsl(var(--border));
   border-radius: 10px;
+}
+
+/* ===== HARDWARE ACCELERATION (GPU LAYERS) ===== */
+.gpu {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
 }

@@ -185,7 +185,7 @@ export default function TransactionsPage() {
                 <p className="text-xs md:text-sm font-semibold text-foreground truncate max-w-[120px] md:max-w-none">{t.description || 'Tanpa Nama'}</p>
                 <div className="text-[10px] md:text-xs text-muted-foreground flex items-center gap-1.5 md:gap-2">
                   <Badge variant="outline" className="text-[8px] md:text-[9px] h-3.5 md:h-4 font-normal bg-muted border-border/50 uppercase tracking-tighter px-1 md:px-2">{t.category_name}</Badge>
-                  <span className="flex items-center gap-1 hidden md:flex"><WalletIcon className="w-2.5 h-2.5" /> {t.wallet_name}</span>
+                  <span className="hidden md:flex items-center gap-1"><WalletIcon className="w-2.5 h-2.5" /> {t.wallet_name}</span>
                   <span className="hidden md:inline">•</span>
                   <span className="truncate">{format(new Date(t.created_at), 'MMM dd')} <span className="hidden md:inline">, {format(new Date(t.created_at), 'HH:mm')}</span></span>
                 </div>

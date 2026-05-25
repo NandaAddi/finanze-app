@@ -141,7 +141,7 @@ export function AddTransactionDialog({ open, onOpenChange, onSuccess, transactio
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] w-full h-[100dvh] sm:h-auto max-w-none sm:rounded-2xl rounded-none bg-card border-border/50 overflow-y-auto">
+      <DialogContent className="sm:max-w-[425px] w-full h-[100dvh] sm:h-auto max-w-none sm:rounded-2xl rounded-none bg-card border-border/50 overflow-y-auto pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
             <div className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center">

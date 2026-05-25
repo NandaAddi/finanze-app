@@ -10,7 +10,7 @@ import {
   ReceiptIcon,
   BarChartIcon,
   Home,
-  Sparkles,
+  BrainCircuit,
   ShieldCheck,
   Scale
 } from "lucide-react"
@@ -56,7 +56,7 @@ const menuItems = [
   { title: "Dompet",      url: "/dashboard/wallets",   icon: WalletIcon },
   { title: "Riwayat Transaksi", url: "/dashboard/transactions",icon: ReceiptIcon },
   { title: "Analitik",    url: "/dashboard/analytics", icon: BarChartIcon },
-  { title: "AI Advisor",    url: "/dashboard/ai-advisor", icon: Sparkles },
+  { title: "AI Advisor",    url: "/dashboard/ai-advisor", icon: BrainCircuit },
   { title: "Pengaturan",     url: "/dashboard/settings",  icon: SettingsIcon },
 ]
 

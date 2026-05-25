@@ -114,7 +114,7 @@ export default function WalletsPage() {
       </div>
 
       {/* ── Filters & Search ── */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8 items-center justify-between hidden md:flex">
+      <div className="hidden md:flex flex-col sm:flex-row gap-4 mb-8 items-center justify-between">
          <div className="relative w-full sm:max-w-xs">
            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
            <Input 
