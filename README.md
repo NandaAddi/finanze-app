@@ -4,7 +4,7 @@ A premium, minimalist personal finance management application built with Next.js
 
 ![Finance Manager](/public/og-image.png)
 
-## 🌟 Features
+## Features
 
 - **Financial Dashboard**: High-level overview of your total net worth, monthly cash flow, and savings rate.
 - **Wallet Management**: Track multiple bank accounts, digital wallets, and cash in one place.
@@ -13,7 +13,7 @@ A premium, minimalist personal finance management application built with Next.js
 - **Cloud Storage**: Persistent profile customization (avatars and banners) integrated with GitHub and jsDelivr.
 - **Minimalist Aesthetic**: Clean, dark-mode interface inspired by Claude.ai, using Lora and Geist typography.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 14 (App Router)](https://nextjs.org/)
 - **Database**: [PostgreSQL (via Supabase)](https://supabase.com/)
@@ -23,7 +23,7 @@ A premium, minimalist personal finance management application built with Next.js
 - **Charts**: [Recharts](https://recharts.org/)
 - **Authentication**: [Supabase Auth](https://supabase.com/auth)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
